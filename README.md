@@ -1,8 +1,8 @@
 # piecemates-site
 
-The Piecemates website: home, Support, Privacy Policy and Terms of Use.
+The Piecemates website: home, Support, Privacy Policy and Terms of Service.
 Plain HTML and one stylesheet, published with GitHub Pages. The text of the
-Privacy Policy, Terms of Use and Support pages comes from Zoë's legal documents.
+Privacy Policy, Terms of Service and Support pages comes from Zoë's legal documents.
 Change it there first, then copy it here.
 
 - No analytics, tracking scripts or cookies. If any are ever added, the Privacy
