@@ -1,0 +1,127 @@
+/* Piecemates site: the app's Tabletop look (colors, fonts and paper grain from
+   the app's design tokens). Fonts are served from this site: no third-party
+   requests, no cookies, no analytics. */
+
+@font-face { font-family: "Parkinsans"; src: url("fonts/Parkinsans-Medium.ttf") format("truetype"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Plus Jakarta Sans"; src: url("fonts/PlusJakartaSans-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Plus Jakarta Sans"; src: url("fonts/PlusJakartaSans-SemiBold.ttf") format("truetype"); font-weight: 600; font-display: swap; }
+
+:root {
+  --bg: #fcf4ec;
+  --surface: #fffbf6;
+  --ink: #12384a;
+  --meta: #4c6772;
+  --accent: #14707f;
+  --outline: #12384a1f;
+  --tan: #cfbca8;
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--bg); }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--bg);
+  font: 400 17px/1.6 "Plus Jakarta Sans", system-ui, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Paper grain at 18%, like the app's background. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: url("paper-grain.png") repeat;
+  background-size: 256px 256px;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.page { max-width: 680px; margin: 0 auto; padding: 0 16px 64px; }
+
+header.site {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  padding: 24px 0 32px;
+}
+
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: 500 24px/1.2 "Parkinsans", system-ui, sans-serif;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+/* The app's engraved diamond. */
+.diamond {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--tan);
+  transform: rotate(45deg);
+  flex: none;
+}
+
+nav a {
+  color: var(--meta);
+  text-decoration: none;
+  margin-left: 16px;
+  font-size: 15px;
+}
+nav a:first-child { margin-left: 0; }
+nav a[aria-current="page"] { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+
+h1, h2 { font-family: "Parkinsans", system-ui, sans-serif; font-weight: 500; line-height: 1.2; }
+h1 { font-size: 40px; margin: 0 0 8px; }
+h2 { font-size: 24px; margin: 40px 0 12px; display: flex; align-items: center; gap: 12px; }
+h2::before { content: ""; width: 9px; height: 9px; border-radius: 2px; background: var(--tan); transform: rotate(45deg); flex: none; }
+
+p, li { margin: 0 0 12px; }
+ul { padding-left: 22px; margin: 0 0 12px; }
+.meta { color: var(--meta); font-size: 15px; }
+a { color: var(--accent); text-underline-offset: 3px; }
+
+.lead { font-size: 20px; color: var(--meta); margin-bottom: 24px; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--outline);
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin: 0 0 16px;
+}
+
+.table-wrap { overflow-x: auto; margin: 0 0 16px; }
+table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--outline); border-radius: 16px; font-size: 15px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--outline); }
+th { font-weight: 600; }
+tr:last-child td { border-bottom: 0; }
+
+.features { list-style: none; padding: 0; display: grid; gap: 12px; }
+.features li { margin: 0; }
+
+.badge {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+footer.site { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--outline); color: var(--meta); font-size: 14px; }
+footer.site a { color: var(--meta); }
+
+@media (max-width: 480px) {
+  h1 { font-size: 32px; }
+  body { font-size: 16px; }
+}
