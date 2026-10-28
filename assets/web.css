@@ -226,6 +226,9 @@ a { color: var(--link); text-underline-offset: 3px; }
   transform: rotate(45deg);
 }
 .sheet p { margin: 0; }
+/* Links to a spot on the page (#faq) land below the fixed nav. */
+.sheet [id] { scroll-margin-top: 112px; }
+@media (max-width: 767px) { .sheet [id] { scroll-margin-top: 96px; } }
 .sheet .lead { max-width: none; font-size: 20px; line-height: 32px; }
 .sheet .meta, .sheet .label { font-size: 14px; line-height: 22px; color: var(--meta); }
 .sheet h3 { margin: 0; font-size: 17px; line-height: 28px; font-weight: 600; }
