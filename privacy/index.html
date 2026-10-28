@@ -5,21 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Privacy Policy · Piecemates</title>
 <meta name="description" content="Privacy Policy for Piecemates, the puzzle journal for iPhone.">
-<link rel="stylesheet" href="../assets/site.css">
+<link rel="stylesheet" href="../assets/web.css?v=3">
 <link rel="icon" href="/favicon.svg?v=4" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico?v=4" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4">
 </head>
 <body>
-<div class="page">
-  <header class="site">
-    <a class="wordmark" href="/"><span class="diamond"></span>Piecemates</a>
-    <nav><a href="/support/">Support</a><a href="/privacy/" aria-current="page">Privacy</a><a href="/terms/">Terms</a></nav>
-  </header>
+<div class="table text-page">
+  <nav class="nav" aria-label="Main">
+    <a class="brand" href="/"><img src="../assets/logo.svg" alt="" width="30" height="32">Piecemates</a>
+    <div class="nav-links"><a href="/support/">Support</a><a href="/privacy/" aria-current="page">Privacy</a><a href="/terms/">Terms</a></div>
+    <!-- Join the beta: the public TestFlight link goes here once Apple approves it. -->
+    <a class="button" href="#" data-testflight>Join the beta</a>
+  </nav>
 
-  <main>
+  <main class="sheet">
     <h1>Privacy Policy</h1>
-    <p>Piecemates is a puzzle journal for iPhone, made by Zoë Morken, an independent developer in Texas. This policy explains what the app collects, why, who can see it, and how to delete it.</p>
+    <p class="lead">Piecemates is a puzzle journal for iPhone, made by Zoë Morken, an independent developer in Texas. This policy explains what the app collects, why, who can see it, and how to delete it.</p>
+    <p class="meta">Effective date: October 20, 2026</p>
 
     <h2>Summary</h2>
     <ul>
@@ -29,21 +32,49 @@
       <li>Puzzles you add to the app's shared puzzle list are public, but never show who added them.</li>
       <li>You can export your data or delete your account from Settings at any time.</li>
     </ul>
-    <p class="meta">Effective date: October 20, 2026</p>
 
     <h2>What the app collects</h2>
     <p>You can browse puzzles without an account. When you sign up or use the app, it collects the following.</p>
-    <div class="table-wrap"><table>
-      <tr><th>What</th><th>Examples</th><th>Where it comes from</th></tr>
-      <tr><td>Account details</td><td>Your name, email address, and profile photo if you add one</td><td>You, or Apple or Google when you sign in with them. With Sign in with Apple you can hide your email, and I receive a relay address instead.</td></tr>
-      <tr><td>Your puzzle journal</td><td>Lists you sort puzzles into (such as Want to Try or Completed), puzzles you own, time spent on each puzzle, finish dates, progress, ratings, notes and your yearly puzzle goal</td><td>You, as you use the app</td></tr>
-      <tr><td>Photos</td><td>Box photos and photos of finished puzzles</td><td>You choose them from your library or take them with the camera. The app only sees the photos you pick.</td></tr>
-      <tr><td>Puzzles you add</td><td>Title, brand, piece count, barcode, dimensions and box photo</td><td>You, when you add a puzzle that isn't listed yet</td></tr>
-      <tr><td>Reports and corrections</td><td>What you flagged and why</td><td>You</td></tr>
-      <tr><td>Messages to support</td><td>Your email address and what you wrote</td><td>You, when you email me</td></tr>
-      <tr><td>Technical data</td><td>IP address, device type and iOS version in server logs</td><td>Your device, automatically, when the app connects to the server</td></tr>
-      <tr><td>Crash reports</td><td>What the app was doing when it crashed</td><td>Your iPhone sends them to Apple, which passes them on to me, only if you've chosen to share analytics with developers in your iPhone's settings</td></tr>
-    </table></div>
+    <div class="row">
+      <h3>Account details</h3>
+      <div><p class="label">Examples</p><p>Your name, email address, and profile photo if you add one</p></div>
+      <div><p class="label">Where it comes from</p><p>You, or Apple or Google when you sign in with them. With Sign in with Apple you can hide your email, and I receive a relay address instead.</p></div>
+    </div>
+    <div class="row">
+      <h3>Your puzzle journal</h3>
+      <div><p class="label">Examples</p><p>Lists you sort puzzles into (such as Want to Try or Completed), puzzles you own, time spent on each puzzle, finish dates, progress, ratings, notes and your yearly puzzle goal</p></div>
+      <div><p class="label">Where it comes from</p><p>You, as you use the app</p></div>
+    </div>
+    <div class="row">
+      <h3>Photos</h3>
+      <div><p class="label">Examples</p><p>Box photos and photos of finished puzzles</p></div>
+      <div><p class="label">Where it comes from</p><p>You choose them from your library or take them with the camera. The app only sees the photos you pick.</p></div>
+    </div>
+    <div class="row">
+      <h3>Puzzles you add</h3>
+      <div><p class="label">Examples</p><p>Title, brand, piece count, barcode, dimensions and box photo</p></div>
+      <div><p class="label">Where it comes from</p><p>You, when you add a puzzle that isn't listed yet</p></div>
+    </div>
+    <div class="row">
+      <h3>Reports and corrections</h3>
+      <div><p class="label">Examples</p><p>What you flagged and why</p></div>
+      <div><p class="label">Where it comes from</p><p>You</p></div>
+    </div>
+    <div class="row">
+      <h3>Messages to support</h3>
+      <div><p class="label">Examples</p><p>Your email address and what you wrote</p></div>
+      <div><p class="label">Where it comes from</p><p>You, when you email me</p></div>
+    </div>
+    <div class="row">
+      <h3>Technical data</h3>
+      <div><p class="label">Examples</p><p>IP address, device type and iOS version in server logs</p></div>
+      <div><p class="label">Where it comes from</p><p>Your device, automatically, when the app connects to the server</p></div>
+    </div>
+    <div class="row">
+      <h3>Crash reports</h3>
+      <div><p class="label">Examples</p><p>What the app was doing when it crashed</p></div>
+      <div><p class="label">Where it comes from</p><p>Your iPhone sends them to Apple, which passes them on to me, only if you've chosen to share analytics with developers in your iPhone's settings</p></div>
+    </div>
     <p>The camera is used to scan barcodes and take photos. Nothing is recorded unless you save a photo.</p>
     <p>The app doesn't collect your location, contacts or browsing activity, and it doesn't use cookies, advertising IDs or tracking tools. Because nothing tracks you across apps or websites, there's nothing for a "Do Not Track" setting to turn off. The support website is hosted on GitHub Pages and has no cookies or analytics either, though GitHub logs visitors' IP addresses for security.</p>
 
@@ -59,25 +90,43 @@
     <p>I don't sell or rent your information, use it for advertising, or track you across other apps and websites.</p>
 
     <h2>What other people can see</h2>
-    <div class="table-wrap"><table>
-      <tr><th>Visible to everyone</th><th>Visible only to you</th></tr>
-      <tr><td>Puzzles you add to the shared puzzle list, including the box photo. Your name is never shown with them.</td><td>Your puzzle lists and the puzzles you own</td></tr>
-      <tr><td>Average ratings, once a puzzle has 5 or more. Your rating counts anonymously; no one sees which rating is yours.</td><td>Time spent on puzzles, your stats and your yearly puzzle goal</td></tr>
-      <tr><td></td><td>Your individual ratings and notes</td></tr>
-      <tr><td></td><td>Photos of your finished puzzles</td></tr>
-    </table></div>
+    <div class="row">
+      <h3>Visible to everyone</h3>
+      <ul>
+          <li>Puzzles you add to the shared puzzle list, including the box photo. Your name is never shown with them.</li>
+          <li>Average ratings, once a puzzle has 5 or more. Your rating counts anonymously; no one sees which rating is yours.</li>
+      </ul>
+    </div>
+    <div class="row">
+      <h3>Visible only to you</h3>
+      <ul>
+          <li>Your puzzle lists and the puzzles you own</li>
+          <li>Time spent on puzzles, your stats and your yearly puzzle goal</li>
+          <li>Your individual ratings and notes</li>
+          <li>Photos of your finished puzzles</li>
+      </ul>
+    </div>
     <p>You keep ownership of the photos you upload. By adding a box photo to a puzzle, you let the app show it to other people.</p>
     <p>A future version will add groups for swapping puzzles with friends. I'll update this policy before then, and anything you've kept private stays private unless you choose to share it.</p>
 
     <h2>Where your data is stored</h2>
     <p>Your data is stored with Supabase, which hosts the app's database, photos and sign-in, on servers in the United States. Database rules limit each account to its own private data.</p>
     <p>A few other services handle parts of the app. Each only gets what it needs for its job, and each is required to protect your data at least as well as this policy describes.</p>
-    <div class="table-wrap"><table>
-      <tr><th>Service</th><th>What it does</th><th>What it receives</th></tr>
-      <tr><td><a href="https://supabase.com/privacy">Supabase</a></td><td>Database, photo storage and sign-in</td><td>Everything listed under What the app collects</td></tr>
-      <tr><td><a href="https://www.apple.com/legal/privacy/">Apple</a></td><td>Sign in with Apple, app distribution and crash reports</td><td>Sign-in details; crash reports if you opted in</td></tr>
-      <tr><td><a href="https://policies.google.com/privacy">Google</a></td><td>Sign in with Google, if you use it</td><td>Sign-in details</td></tr>
-    </table></div>
+    <div class="row">
+      <h3><a href="https://supabase.com/privacy">Supabase</a></h3>
+      <div><p class="label">What it does</p><p>Database, photo storage and&nbsp;sign-in</p></div>
+      <div><p class="label">What it receives</p><p>Everything listed under What the app collects</p></div>
+    </div>
+    <div class="row">
+      <h3><a href="https://www.apple.com/legal/privacy/">Apple</a></h3>
+      <div><p class="label">What it does</p><p>Sign in with Apple, app distribution and crash reports</p></div>
+      <div><p class="label">What it receives</p><p>Sign-in details; crash reports if you opted in</p></div>
+    </div>
+    <div class="row">
+      <h3><a href="https://policies.google.com/privacy">Google</a></h3>
+      <div><p class="label">What it does</p><p>Sign in with Google, if you use it</p></div>
+      <div><p class="label">What it receives</p><p>Sign-in details</p></div>
+    </div>
     <p>I may share information if the law requires it, or to protect the app's users from harm.</p>
 
     <h2>How your data is protected</h2>
@@ -129,10 +178,12 @@
     <p>Questions or requests: <a href="mailto:piecematesapp@gmail.com">piecematesapp@gmail.com</a></p>
     <p>Zoë Morken, Dallas, Texas</p>
   </main>
-
-  <footer class="site">
-    <p>Piecemates by Zoë Morken · <a href="/support/">Support</a> · <a href="/terms/">Terms of Service</a></p>
-  </footer>
 </div>
+
+<footer class="footer">
+  <p><span class="group">Piecemates by Zoë Morken ·</span> <span class="group"><a href="mailto:piecematesapp@gmail.com">piecematesapp@gmail.com</a> ·</span> <span class="group"><a href="/support/">Support</a> · <a href="/privacy/">Privacy Policy</a> · <a href="/terms/">Terms of Service</a></span></p>
+</footer>
+
+<script src="../assets/web.js?v=3"></script>
 </body>
 </html>
