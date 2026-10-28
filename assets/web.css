@@ -143,7 +143,7 @@ a { color: var(--link); text-underline-offset: 3px; }
   text-decoration: none;
   font: 600 14px/20px "Plus Jakarta Sans", system-ui, sans-serif;
 }
-.nav-links a:hover, .nav-links a[aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; }
+.nav-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
 
 /* The app's primary button, in web/button colors. */
 .button {
@@ -186,7 +186,53 @@ a { color: var(--link); text-underline-offset: 3px; }
     justify-content: space-between;
   }
   .nav-links { display: none; }
-  .footer { padding-bottom: 24px; }
+  .footer { padding: 16px var(--gutter) 24px; }
+}
+
+/* ---------- Text pages (Support, Privacy, Terms) ---------- */
+
+/* The words sit on a sheet: 720 wide, 56 padding (phones: full width, 24). */
+.table.text-page { padding: 136px 16px 96px; }
+.sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 56px;
+  border-radius: 16px;
+  background: var(--sheet);
+  color: var(--sheet-text);
+}
+.sheet h1 { margin: 0; font: 500 40px/48px "Parkinsans", system-ui, sans-serif; }
+.sheet h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding-top: 24px;
+  font: 500 24px/32px "Parkinsans", system-ui, sans-serif;
+}
+/* The app's engraved diamond marker. */
+.sheet h2::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin: 0 4px;
+  border-radius: 1px;
+  background: var(--marker);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.9);
+  transform: rotate(45deg);
+}
+.sheet p { margin: 0; }
+.sheet a { color: inherit; text-decoration: none; }
+.sheet a:hover { text-decoration: underline; }
+.faq h3 { margin: 0; font-size: 17px; line-height: 28px; font-weight: 600; }
+
+@media (max-width: 767px) {
+  .table.text-page { padding: 96px 8px 24px; }
+  .sheet { padding: 24px; }
 }
 
 /* ---------- Home ---------- */

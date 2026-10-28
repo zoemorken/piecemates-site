@@ -1,6 +1,6 @@
-// Home page motion: the scattered pieces and their opening animation, the
-// dotted lines beside the section titles, and the scroll reveal. The page is
-// complete without this file; it only adds to it.
+// Site motion: the scattered pieces (with the opening animation on Home), and
+// on Home the dotted lines beside the section titles and the scroll reveal.
+// Pages are complete without this file; it only adds to them.
 (function () {
   "use strict";
 
@@ -47,7 +47,7 @@
       range.selectNodeContents(el);
       Array.prototype.forEach.call(range.getClientRects(), function (r) { add(r, 40); });
     });
-    add(document.querySelector(".screens-row").getBoundingClientRect(), 16);
+    document.querySelectorAll(".screens-row, .sheet").forEach(function (el) { add(el.getBoundingClientRect(), 16); });
     return rects;
   }
 
