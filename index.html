@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Piecemates: the missing piece to your puzzle nights</title>
+<title>Piecemates</title>
 <meta name="description" content="Piecemates is the companion that keeps track of every jigsaw, from the moment you open the box to the finished picture. Coming soon to iPhone.">
 <link rel="stylesheet" href="assets/web.css">
 <link rel="icon" href="/favicon.svg?v=4" type="image/svg+xml">
@@ -14,7 +14,7 @@
   // landed (home.js). If Reduce Motion is on, or home.js never runs, they show.
   if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
     document.documentElement.classList.add("intro");
-    setTimeout(function () { document.documentElement.classList.remove("intro"); }, 4000);
+    window.introSafety = setTimeout(function () { document.documentElement.classList.remove("intro"); }, 4000);
   }
 </script>
 </head>
@@ -29,7 +29,21 @@
 
   <main>
     <section class="hero">
-      <h1 class="hero-title">The missing piece to<br> your puzzle&nbsp;nights.</h1>
+      <h1 class="hero-title">The missing<br class="phone-br"> piece to<br class="desktop-br"> your<br class="phone-br"> puzzle&nbsp;<span id="daypart">days</span>.</h1>
+      <script>
+        // The headline's last word follows the visitor's clock (handoff, Oct 28 17:30):
+        // mornings 5–11:59, afternoons 12–4:59 PM, evenings 5–8:59 PM, nights 9 PM–4:59 AM.
+        // Without JavaScript it stays "days". Checked once a minute while the tab is open.
+        (function () {
+          var el = document.getElementById("daypart");
+          function update() {
+            var h = new Date().getHours();
+            el.textContent = h >= 5 && h < 12 ? "mornings" : h >= 12 && h < 17 ? "afternoons" : h >= 17 && h < 21 ? "evenings" : "nights";
+          }
+          update();
+          setInterval(update, 60000);
+        })();
+      </script>
       <p class="lead">Piecemates is the companion that keeps track of every jigsaw, from the moment you open the box to the finished&nbsp;picture.</p>
       <a class="button" href="#" data-testflight>Join the beta</a>
       <p class="meta-line">Coming soon to&nbsp;iPhone.</p>
@@ -94,7 +108,7 @@
     </div>
 
     <section class="closing">
-      <h2>Get in on the action and try Piecemates&nbsp;today!</h2>
+      <h2>Get in on the<br class="phone-br"> action and try<br class="phone-br"> Piecemates&nbsp;today!</h2>
       <a class="button" href="#" data-testflight>Join the beta</a>
       <p class="meta-line">Coming soon to&nbsp;iPhone.</p>
     </section>

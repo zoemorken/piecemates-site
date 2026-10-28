@@ -178,12 +178,15 @@
   var lastWidth = window.innerWidth;
 
   function start() {
+    clearTimeout(window.introSafety);   // the opening is running, so it decides when the words show
     sizeDots();
     setUpReveal();
     makePieces(scatter());
-    if (reduceMotion) {
+    // On a very slow load the safety timer may already have shown the words;
+    // then the table is simply cleared, so the pieces never fly over text.
+    if (reduceMotion || !root.classList.contains("intro")) {
       settle();
-      root.classList.remove("intro");
+      showWords();
     } else {
       clearTable();
     }

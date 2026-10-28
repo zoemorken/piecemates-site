@@ -106,10 +106,11 @@ a { color: var(--link); text-underline-offset: 3px; }
   pointer-events: none;
 }
 
-/* Nav (Web/Nav): a glass pill that hugs its content, centered, 32 from the top. */
+/* Nav (Web/Nav): a glass pill that hugs its content, centered, 32 from the top.
+   It stays there while the page scrolls (Zoë, Oct 28). */
 .nav {
-  position: absolute;
-  top: 16px;
+  position: fixed;
+  top: 32px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 3;
@@ -178,9 +179,9 @@ a { color: var(--link); text-underline-offset: 3px; }
 @media (max-width: 767px) {
   .table { padding-bottom: 56px; }
   .nav {
-    top: 8px;
-    left: 8px;
-    right: 8px;
+    top: 16px;
+    left: 16px;
+    right: 16px;
     transform: none;
     justify-content: space-between;
   }
@@ -197,13 +198,14 @@ a { color: var(--link); text-underline-offset: 3px; }
   gap: 24px;
   max-width: 960px;
   margin: 0 auto;
-  padding: 256px 48px 0;
+  padding: 256px 24px 0;
   text-align: center;
 }
 .hero-title {
   margin: 0;
   font: 500 56px/64px "Parkinsans", system-ui, sans-serif;
 }
+.phone-br { display: none; }
 .lead { margin: 0; max-width: 600px; font-size: 20px; line-height: 32px; }
 
 /* App screens: Home in front at 115%, the other two tucked 48 behind it.
@@ -320,8 +322,10 @@ a { color: var(--link); text-underline-offset: 3px; }
 
 @media (max-width: 767px) {
   .hero { padding: 200px 24px 0; }
-  .hero-title, .closing h2 { font-size: 36px; line-height: 44px; }
-  .hero-title br { display: none; }
+  /* web/heroPhone 32/40 (Oct 28 17:30), with design's phone line breaks. */
+  .hero-title, .closing h2 { font-size: 32px; line-height: 40px; }
+  .desktop-br { display: none; }
+  .phone-br { display: inline; }
   .screens { width: auto; margin: 56px auto; }
   .screens-row { --u: 1px; }
   .phone.side-left, .phone.side-right { display: none; }
@@ -337,12 +341,6 @@ a { color: var(--link); text-underline-offset: 3px; }
   .sheet-card { padding: 24px; }
   .features { grid-template-columns: 1fr; }
   .closing { margin-top: 64px; padding: 0 8px; }
-}
-
-/* Narrow phones: the headlines use Figma's web/heroPhone (32/40) so
-   "Piecemates today!" stays on one line at 360. */
-@media (max-width: 389px) {
-  .hero-title, .closing h2 { font-size: 32px; line-height: 40px; }
 }
 
 /* Pieces (Web/PuzzlePiece): flat fills, no outline, shadow or grain. */
