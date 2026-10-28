@@ -1,0 +1,375 @@
+/* Piecemates site, Oct 28 redesign: the Web variable collection from Figma
+   (Light/Dark by the system setting, no toggle), the app's paper grain on the
+   table only, and the web/* text styles. Fonts are served from this site: no
+   third-party requests, no cookies, no analytics. All spacing on the 8pt grid. */
+
+@font-face { font-family: "Parkinsans"; src: url("fonts/Parkinsans-Medium.ttf") format("truetype"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Plus Jakarta Sans"; src: url("fonts/PlusJakartaSans-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Plus Jakarta Sans"; src: url("fonts/PlusJakartaSans-Medium.ttf") format("truetype"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Plus Jakarta Sans"; src: url("fonts/PlusJakartaSans-SemiBold.ttf") format("truetype"); font-weight: 600; font-display: swap; }
+
+/* Colors: Figma's Web collection. Light = Mist table on paper. */
+:root {
+  color-scheme: light dark;
+  --page: #fffbf6;
+  --table: #b5d2d8;
+  --sheet: #fffbf6;
+  --sheet-text: #12384a;
+  --text: #12384a;
+  --meta: #4c6772;
+  --rule: #12384a1f;
+  --link: #14707f;
+  --marker: #cfbca8;
+  --nav-fill: #ffffff99;
+  --nav-stroke: #12384a14;
+  --button-bg: #135b73;
+  --button-label: #ffffff;
+  --piece-blush: #f3bfb0;
+  --piece-apricot: #f9cba4;
+  --piece-sand: #eed6ae;
+  --piece-honey: #f0d9a8;
+  --piece-melon: #f6b08c;
+  --piece-roseClay: #eba898;
+  --piece-lavender: #e2dcf6;
+  --piece-sage: #d2eac8;
+  --bezel: #12384a;
+  --gutter: 16px;
+  --table-radius: 32px;
+}
+
+/* Dark = Marine table on deep marine. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #0b2531;
+    --table: #135b73;
+    --sheet: #0b2531;
+    --sheet-text: #fbf3ea;
+    --text: #fbf3ea;
+    --meta: #a9bcc2;
+    --rule: #ffffff1f;
+    --link: #b5d2d8;
+    --nav-fill: #0b25318c;
+    --nav-stroke: #ffffff1f;
+    --button-bg: #b5d2d8;
+    --button-label: #12384a;
+    --piece-blush: #72473a;
+    --piece-apricot: #78512d;
+    --piece-sand: #705b36;
+    --piece-honey: #725d30;
+    --piece-melon: #854826;
+    --piece-roseClay: #8a4f41;
+    --piece-lavender: #666077;
+    --piece-sage: #576c4f;
+  }
+}
+
+@media (max-width: 767px) {
+  :root { --gutter: 8px; --table-radius: 24px; }
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--page); -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  color: var(--text);
+  background: var(--page);
+  font: 400 17px/28px "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+h1, h2, h3, .hero-title, .section-title { text-wrap: balance; }
+p, li { text-wrap: pretty; }
+
+a { color: var(--link); text-underline-offset: 3px; }
+
+/* The table: one rounded Mist (or Marine) surface that holds the whole page. */
+.table {
+  position: relative;
+  margin: var(--gutter) var(--gutter) 0;
+  border-radius: var(--table-radius);
+  background: var(--table);
+  overflow: hidden;
+  isolation: isolate;
+  padding-bottom: 96px;
+}
+
+/* The app's paper grain at 18%, on the table only (never on pieces or sheets). */
+.table::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url("paper-grain.png") repeat;
+  background-size: 256px 256px;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+/* Nav (Web/Nav): a glass pill that hugs its content, centered, 32 from the top. */
+.nav {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 8px 8px 8px 16px;
+  border: 1px solid var(--nav-stroke);
+  border-radius: 999px;
+  background: var(--nav-fill);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  white-space: nowrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+  text-decoration: none;
+  font: 500 20px/28px "Parkinsans", system-ui, sans-serif;
+  letter-spacing: -0.2px;
+}
+.brand img { display: block; height: 32px; width: auto; }
+
+.nav-links { display: flex; gap: 24px; }
+.nav-links a {
+  color: var(--text);
+  text-decoration: none;
+  font: 600 14px/20px "Plus Jakarta Sans", system-ui, sans-serif;
+}
+.nav-links a:hover, .nav-links a[aria-current="page"] { text-decoration: underline; text-underline-offset: 4px; }
+
+/* The app's primary button, in web/button colors. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px;
+  border-radius: 999px;
+  background: var(--button-bg);
+  color: var(--button-label);
+  text-decoration: none;
+  font: 500 16px/24px "Plus Jakarta Sans", system-ui, sans-serif;
+}
+.button:active { transform: scale(0.98); }
+.button:focus-visible, .nav a:focus-visible, .footer a:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+.nav .button { padding: 12px 16px; font-size: 14px; line-height: 20px; }
+
+.meta-line { margin: 0; font-size: 14px; line-height: 22px; color: var(--text); }
+
+/* Footer: on the page color under the table. */
+.footer {
+  margin: 0;
+  padding: 24px var(--gutter) 32px;
+  text-align: center;
+  color: var(--meta);
+  font-size: 14px;
+  line-height: 22px;
+}
+.footer p { margin: 0; }
+.footer a { color: var(--meta); }
+.footer .group { white-space: nowrap; }
+
+@media (max-width: 767px) {
+  .table { padding-bottom: 56px; }
+  .nav {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    transform: none;
+    justify-content: space-between;
+  }
+  .nav-links { display: none; }
+  .footer { padding-bottom: 24px; }
+}
+
+/* ---------- Home ---------- */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 256px 48px 0;
+  text-align: center;
+}
+.hero-title {
+  margin: 0;
+  font: 500 56px/64px "Parkinsans", system-ui, sans-serif;
+}
+.lead { margin: 0; max-width: 600px; font-size: 20px; line-height: 32px; }
+
+/* App screens: Home in front at 115%, the other two tucked 48 behind it.
+   Sized in container units so the group scales down on narrow tables. */
+.screens {
+  container-type: inline-size;
+  width: min(920px, 100% - 48px);
+  margin: 88px auto 112px;
+}
+.screens-row {
+  --u: calc(100cqw / 920);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.phone {
+  flex: none;
+  background: var(--bezel);
+  padding: calc(8 * var(--u));
+  border-radius: calc(40 * var(--u));
+  width: calc(264 * var(--u));
+  box-shadow: 0 calc(16 * var(--u)) calc(32 * var(--u)) rgb(18 56 74 / 0.18);
+}
+.phone img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 248 / 538;
+  border-radius: calc(32 * var(--u));
+}
+.phone.side-left { margin-right: calc(-48 * var(--u)); }
+.phone.side-right { margin-left: calc(-48 * var(--u)); }
+.phone.front {
+  position: relative;
+  z-index: 1;
+  width: calc(340.4 * var(--u));
+  padding: calc(9.2 * var(--u));
+  border-radius: calc(50.6 * var(--u));
+  box-shadow: 0 calc(18.4 * var(--u)) calc(36.8 * var(--u)) rgb(18 56 74 / 0.18);
+}
+.phone.front img { aspect-ratio: 322 / 698; border-radius: calc(41.4 * var(--u)); }
+
+/* Two sections, 64 apart: a centered title with a dotted line on each side,
+   24 below it a sheet with three features. */
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  width: min(1072px, 100% - 96px);
+  margin: 0 auto;
+}
+.section { display: flex; flex-direction: column; gap: 24px; }
+.section-head {
+  --dash: color-mix(in srgb, var(--text) 40%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+.section-title {
+  margin: 0;
+  flex: none;
+  font: 500 28px/36px "Parkinsans", system-ui, sans-serif;
+  color: var(--text);
+}
+/* 1pt dots, 3 on / 3 off. home.js trims each line to 6n - 3 so both ends are
+   whole dashes; without it the lines just fill the space. */
+.dots {
+  flex: 1 1 0;
+  height: 1px;
+  background: linear-gradient(to right, var(--dash) 3px, transparent 3px) 0 0 / 6px 1px repeat-x;
+}
+.dots.left { background-position: right 0 top 0; }
+.dots.sized { flex: none; width: var(--w); }
+
+.sheet-card {
+  background: var(--sheet);
+  color: var(--sheet-text);
+  border-radius: 16px;
+  padding: 48px;
+}
+.features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+.feature { display: flex; flex-direction: column; gap: 16px; }
+.icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  color: var(--sheet-text);
+}
+.icon-circle svg { width: 24px; height: 24px; }
+.feature h3 { margin: 0; font-size: 17px; line-height: 28px; font-weight: 600; }
+.feature p { margin: 0; }
+
+.closing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin: 96px auto 0;
+  padding: 0 48px;
+  text-align: center;
+}
+.closing h2 { margin: 0; font: 500 40px/48px "Parkinsans", system-ui, sans-serif; }
+
+@media (max-width: 767px) {
+  .hero { padding: 200px 24px 0; }
+  .hero-title, .closing h2 { font-size: 36px; line-height: 44px; }
+  .hero-title br { display: none; }
+  .screens { width: auto; margin: 56px auto; }
+  .screens-row { --u: 1px; }
+  .phone.side-left, .phone.side-right { display: none; }
+  .phone.front {
+    width: 256px;
+    padding: 8px;
+    border-radius: 38px;
+    box-shadow: 0 16px 32px rgb(18 56 74 / 0.18);
+  }
+  .phone.front img { border-radius: 30px; }
+  .sections { gap: 48px; width: calc(100% - 16px); }
+  .section-head { gap: 16px; }
+  .sheet-card { padding: 24px; }
+  .features { grid-template-columns: 1fr; }
+  .closing { margin-top: 64px; padding: 0 8px; }
+}
+
+/* Narrow phones: the headlines use Figma's web/heroPhone (32/40) so
+   "Piecemates today!" stays on one line at 360. */
+@media (max-width: 389px) {
+  .hero-title, .closing h2 { font-size: 32px; line-height: 40px; }
+}
+
+/* Pieces (Web/PuzzlePiece): flat fills, no outline, shadow or grain. */
+.pieces { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.piece { position: absolute; left: 0; top: 0; display: block; }
+
+/* Opening: the nav fades in once the pieces start clearing. */
+.intro .nav { opacity: 0; }
+.nav.fade-in { opacity: 1; transition: opacity 300ms ease-out; }
+
+/* Scroll reveal, once per visit. The page is complete without it: these
+   start states only apply after home.js adds .reveal. */
+.reveal .dots.sized.left { clip-path: inset(0 0 0 calc(var(--w) + 3px)); }
+.reveal .dots.sized.right { clip-path: inset(0 calc(var(--w) + 3px) 0 0); }
+.reveal .section-title { opacity: 0; transform: translateY(8px); }
+.reveal .feature { opacity: 0; transform: translateY(16px); }
+
+.revealed .dots.sized.left { animation: draw-left 600ms steps(var(--n), jump-end) forwards; }
+.revealed .dots.sized.right { animation: draw-right 600ms steps(var(--n), jump-end) forwards; }
+.revealed .section-title { animation: rise 400ms ease-out forwards; }
+.revealed .feature { animation: rise 400ms ease-out forwards; animation-delay: calc(600ms + var(--i) * 80ms); }
+
+@keyframes draw-left { to { clip-path: inset(0 0 0 0); } }
+@keyframes draw-right { to { clip-path: inset(0 0 0 0); } }
+@keyframes rise { to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .intro .nav { opacity: 1; }
+  .reveal .dots.sized, .reveal .section-title, .reveal .feature { clip-path: none; opacity: 1; transform: none; animation: none; }
+}
