@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Piecemates</title>
 <meta name="description" content="Piecemates is the companion that keeps track of every jigsaw, from the moment you open the box to the finished picture. Coming soon to iPhone.">
-<link rel="stylesheet" href="assets/web.css?v=3">
+<link rel="stylesheet" href="assets/web.css?v=4">
 <link rel="icon" href="/favicon.svg?v=4" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico?v=4" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4">
 <script>
-  // The opening animation hides the nav and hero words until the pieces have
-  // landed (web.js). If Reduce Motion is on, or web.js never runs, they show.
+  // The opening animation hides everything but the table and pieces until the
+  // pieces have landed (web.js). If Reduce Motion is on, or web.js never runs, it all shows.
   if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
     document.documentElement.classList.add("intro");
     window.introSafety = setTimeout(function () { document.documentElement.classList.remove("intro"); }, 4000);
@@ -119,6 +119,6 @@
   <p><span class="group">Piecemates by Zoë Morken ·</span> <span class="group"><a href="mailto:piecematesapp@gmail.com">piecematesapp@gmail.com</a> ·</span> <span class="group"><a href="/support/">Support</a> · <a href="/privacy/">Privacy Policy</a> · <a href="/terms/">Terms of Service</a></span></p>
 </footer>
 
-<script src="assets/web.js?v=3"></script>
+<script src="assets/web.js?v=4"></script>
 </body>
 </html>

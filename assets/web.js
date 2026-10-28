@@ -80,7 +80,7 @@
   var layer, pieces = [], timers = [];
 
   function makePieces(spots) {
-    if (timers.length) showWords();  // a resize mid-opening skips the rest of it
+    if (timers.length) showPage();  // a resize mid-opening skips the rest of it
     timers.forEach(clearTimeout);
     timers = [];
     if (layer) layer.remove();
@@ -114,7 +114,7 @@
   }
 
   // Piled in the middle of the first screen, a hold, then the pieces glide
-  // out to the edges. The nav and hero words fade in once the last one lands.
+  // out to the edges. The nav and the rest of the page fade in once the last one lands.
   function clearTable() {
     var W = table.clientWidth;
     var H = Math.min(table.clientHeight, window.innerHeight - table.getBoundingClientRect().top - window.scrollY);
@@ -129,10 +129,10 @@
         place(p, p.spot.x, p.spot.y, p.spot.turn);
       });
     }, HOLD));
-    timers.push(setTimeout(showWords, HOLD + STAGGER + GLIDE));
+    timers.push(setTimeout(showPage, HOLD + STAGGER + GLIDE));
   }
 
-  function showWords() { root.classList.remove("intro"); }
+  function showPage() { root.classList.remove("intro"); }
 
   // ---------- Dotted lines ----------
 
@@ -178,15 +178,15 @@
   var lastWidth = window.innerWidth;
 
   function start() {
-    clearTimeout(window.introSafety);   // the opening is running, so it decides when the words show
+    clearTimeout(window.introSafety);   // the opening is running, so it decides when the page shows
     sizeDots();
     setUpReveal();
     makePieces(scatter());
-    // On a very slow load the safety timer may already have shown the words;
+    // On a very slow load the safety timer may already have shown the page;
     // then the table is simply cleared, so the pieces never fly over text.
     if (reduceMotion || !root.classList.contains("intro")) {
       settle();
-      showWords();
+      showPage();
     } else {
       clearTable();
     }
