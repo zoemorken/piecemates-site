@@ -349,9 +349,9 @@ a { color: var(--link); text-underline-offset: 3px; }
 .pieces { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
 .piece { position: absolute; left: 0; top: 0; display: block; }
 
-/* Opening: the nav fades in once the pieces start clearing. */
-.intro .nav { opacity: 0; }
-.nav.fade-in { opacity: 1; transition: opacity 300ms ease-out; }
+/* Opening: the nav and hero words fade in once the pieces have landed. */
+.nav, .hero { transition: opacity 300ms ease-out; }
+.intro .nav, .intro .hero { opacity: 0; }
 
 /* Scroll reveal, once per visit. The page is complete without it: these
    start states only apply after home.js adds .reveal. */
@@ -370,6 +370,6 @@ a { color: var(--link); text-underline-offset: 3px; }
 @keyframes rise { to { opacity: 1; transform: none; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .intro .nav { opacity: 1; }
+  .intro .nav, .intro .hero { opacity: 1; }
   .reveal .dots.sized, .reveal .section-title, .reveal .feature { clip-path: none; opacity: 1; transform: none; animation: none; }
 }

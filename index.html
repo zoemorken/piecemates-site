@@ -10,8 +10,8 @@
 <link rel="icon" href="/favicon.ico?v=4" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4">
 <script>
-  // The opening animation hides the nav until it fades in (home.js). If
-  // Reduce Motion is on, or home.js never runs, the nav simply shows.
+  // The opening animation hides the nav and hero words until the pieces have
+  // landed (home.js). If Reduce Motion is on, or home.js never runs, they show.
   if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
     document.documentElement.classList.add("intro");
     setTimeout(function () { document.documentElement.classList.remove("intro"); }, 4000);

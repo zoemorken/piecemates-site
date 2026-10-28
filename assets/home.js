@@ -23,10 +23,10 @@
   ];
   var COLORS = ["blush", "apricot", "sand", "honey", "melon", "roseClay", "lavender", "sage"];
 
-  var HOLD = 700;   // the pile sits still
-  var STEPS = 5;    // stop-motion jumps out to the edges
-  var STEP = 320;
-  var NAV_FADE_AT = HOLD;
+  var HOLD = 700;     // the pile sits still
+  var GLIDE = 1000;   // then each piece glides out to its edge (Zoë, Oct 28: smooth, not stop-motion)
+  var STAGGER = 200;  // pieces leave up to this much apart
+  var EASE = "cubic-bezier(0.22, 0.8, 0.3, 1)";
 
   function rand(a, b) { return a + Math.random() * (b - a); }
   function pick(list) { return list[Math.floor(Math.random() * list.length)]; }
@@ -80,7 +80,8 @@
   var layer, pieces = [], timers = [];
 
   function makePieces(spots) {
-    timers.forEach(clearTimeout);   // a resize mid-opening skips the rest of it
+    if (timers.length) showWords();  // a resize mid-opening skips the rest of it
+    timers.forEach(clearTimeout);
     timers = [];
     if (layer) layer.remove();
     layer = document.createElement("div");
@@ -112,8 +113,8 @@
     pieces.forEach(function (p) { place(p, p.spot.x, p.spot.y, p.spot.turn); });
   }
 
-  // Piled in the middle of the first screen, a hold, then five stop-motion
-  // jumps to the edges, each with a small random turn and nudge.
+  // Piled in the middle of the first screen, a hold, then the pieces glide
+  // out to the edges. The nav and hero words fade in once the last one lands.
   function clearTable() {
     var W = table.clientWidth;
     var H = Math.min(table.clientHeight, window.innerHeight - table.getBoundingClientRect().top - window.scrollY);
@@ -122,25 +123,16 @@
       p.pile = { x: cx + rand(-56, 56), y: cy + rand(-40, 40), turn: rand(0, 360) };
       place(p, p.pile.x, p.pile.y, p.pile.turn);
     });
-    setTimeout(function () {
-      nav.classList.add("fade-in");
-      root.classList.remove("intro");
-    }, NAV_FADE_AT);
-    for (var k = 1; k <= STEPS; k++) {
-      (function (k) {
-        timers.push(setTimeout(function () {
-          var f = k / STEPS;
-          pieces.forEach(function (p) {
-            if (k === STEPS) { place(p, p.spot.x, p.spot.y, p.spot.turn); return; }
-            place(p,
-              p.pile.x + (p.spot.x - p.pile.x) * f + rand(-6, 6),
-              p.pile.y + (p.spot.y - p.pile.y) * f + rand(-6, 6),
-              p.pile.turn + (p.spot.turn - p.pile.turn) * f + rand(-8, 8));
-          });
-        }, HOLD + (k - 1) * STEP));
-      })(k);
-    }
+    timers.push(setTimeout(function () {
+      pieces.forEach(function (p) {
+        p.el.style.transition = "transform " + GLIDE + "ms " + EASE + " " + Math.round(rand(0, STAGGER)) + "ms";
+        place(p, p.spot.x, p.spot.y, p.spot.turn);
+      });
+    }, HOLD));
+    timers.push(setTimeout(showWords, HOLD + STAGGER + GLIDE));
   }
+
+  function showWords() { root.classList.remove("intro"); }
 
   // ---------- Dotted lines ----------
 
