@@ -24,6 +24,7 @@
   --nav-stroke: #12384a14;
   --button-bg: #135b73;
   --button-label: #ffffff;
+  --button-hover: #14707f;   /* color/accent, the site's link teal */
   --piece-blush: #f3bfb0;
   --piece-apricot: #f9cba4;
   --piece-sand: #eed6ae;
@@ -52,6 +53,7 @@
     --nav-stroke: #ffffff1f;
     --button-bg: #b5d2d8;
     --button-label: #12384a;
+    --button-hover: color-mix(in srgb, #b5d2d8 55%, #ffffff);   /* a lighter Mist */
     --piece-blush: #72473a;
     --piece-apricot: #78512d;
     --piece-sand: #705b36;
@@ -167,6 +169,16 @@ a { color: var(--link); text-underline-offset: 3px; }
   color: var(--button-label);
   text-decoration: none;
   font: 500 16px/24px "Plus Jakarta Sans", system-ui, sans-serif;
+}
+/* Hover (Zoë, Oct 29): a lighter blue fills the button from left to right.
+   The background is twice the button's width, hover half and base half, and
+   slides across. Pointer devices only. */
+@media (hover: hover) {
+  .button {
+    background: linear-gradient(to right, var(--button-hover) 50%, var(--button-bg) 50%) right / 200% 100% no-repeat;
+    transition: background-position 300ms ease-out;
+  }
+  .button:hover { background-position: left; }
 }
 .button:active { transform: scale(0.98); }
 .button:focus-visible, .nav a:focus-visible, .footer a:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
@@ -483,5 +495,6 @@ main { position: relative; z-index: 1; }
   .intro .nav, .intro .hero > *, .intro .sections, .intro .closing, .intro .footer { opacity: 1; transform: none; pointer-events: auto; }
   .screens-wait .phone { opacity: 1; transform: none; }
   .arrive .sheet { animation: none; }
+  .button { transition: none; }   /* the hover color still changes, without the sweep */
   .reveal .dots.sized, .reveal .section-title, .reveal .sheet-card, .reveal .feature, .closing.reveal > * { clip-path: none; opacity: 1; transform: none; animation: none; }
 }
