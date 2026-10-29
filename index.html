@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Piecemates</title>
-<meta name="description" content="Piecemates is the companion that keeps track of every jigsaw, from the moment you open the box to the finished picture. Coming soon to iPhone.">
+<meta name="description" content="Piecemates helps you keep track of every jigsaw puzzle you own, build and finish, all in one place. Coming soon to iPhone.">
 <!-- Link previews (Messages, Slack, social). The picture is the Figma frame
      Website → Link preview (Zoë, Oct 29), exported at 1200 × 630. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Piecemates">
 <meta property="og:title" content="Piecemates">
-<meta property="og:description" content="Piecemates is the companion that keeps track of every jigsaw, from the moment you open the box to the finished picture. Coming soon to iPhone.">
+<meta property="og:description" content="Piecemates helps you keep track of every jigsaw puzzle you own, build and finish, all in one place. Coming soon to iPhone.">
 <meta property="og:url" content="https://piecemates.app/">
 <meta property="og:image" content="https://piecemates.app/assets/og-image.jpg?v=1">
 <meta property="og:image:width" content="1200">
@@ -54,22 +54,8 @@
 
   <main>
     <section class="hero">
-      <h1 class="hero-title">The missing<br class="phone-br"> piece to<br class="desktop-br"> your<br class="phone-br"> puzzle&nbsp;<span id="daypart">days</span>.</h1>
-      <script>
-        // The headline's last word follows the visitor's clock (handoff, Oct 28 17:30):
-        // mornings 5–11:59, afternoons 12–4:59 PM, evenings 5–8:59 PM, nights 9 PM–4:59 AM.
-        // Without JavaScript it stays "days". Checked once a minute while the tab is open.
-        (function () {
-          var el = document.getElementById("daypart");
-          function update() {
-            var h = new Date().getHours();
-            el.textContent = h >= 5 && h < 12 ? "mornings" : h >= 12 && h < 17 ? "afternoons" : h >= 17 && h < 21 ? "evenings" : "nights";
-          }
-          update();
-          setInterval(update, 60000);
-        })();
-      </script>
-      <p class="lead">Piecemates is the companion that keeps track of every jigsaw, from the moment you open the box to the finished&nbsp;picture.</p>
+      <h1 class="hero-title">The missing<br class="phone-br"> piece to<br class="desktop-br"> your<br class="phone-br"> puzzle&nbsp;time.</h1>
+      <p class="lead">Piecemates helps you keep track of every jigsaw puzzle you own, build and finish, all in one&nbsp;place.</p>
       <a class="button" href="#" data-testflight>Join the beta</a>
       <p class="meta-line">Coming soon to&nbsp;iPhone.</p>
     </section>
@@ -93,15 +79,15 @@
           <ul class="features">
             <li class="feature">
               <span class="icon-circle" style="background: var(--piece-blush)"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" aria-hidden="true"><polyline points="184 48 224 48 224 88"/><polyline points="72 208 32 208 32 168"/><polyline points="224 168 224 208 184 208"/><polyline points="32 88 32 48 72 48"/><line x1="80" y1="88" x2="80" y2="168"/><line x1="176" y1="88" x2="176" y2="168"/><line x1="144" y1="88" x2="144" y2="168"/><line x1="112" y1="88" x2="112" y2="168"/></svg></span>
-              <div><h3>Scan or search</h3><p>Add a puzzle by searching for it or scanning the barcode on the&nbsp;box.</p></div>
+              <div><h3>Scan or search</h3><p>Search by name or scan the barcode on the box to add a&nbsp;puzzle.</p></div>
             </li>
             <li class="feature">
               <span class="icon-circle" style="background: var(--piece-honey)"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" aria-hidden="true"><circle cx="128" cy="136" r="88"/><line x1="128" y1="136" x2="168" y2="96"/><line x1="104" y1="16" x2="152" y2="16"/></svg></span>
-              <div><h3>Build timer</h3><p>Time each puzzle while you&nbsp;build.</p></div>
+              <div><h3>Time your builds</h3><p>See how long each puzzle takes, one session at a&nbsp;time.</p></div>
             </li>
             <li class="feature">
               <span class="icon-circle" style="background: var(--piece-sage)"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" aria-hidden="true"><rect x="32" y="48" width="192" height="160" rx="8"/><circle cx="156" cy="100" r="12" fill="currentColor" stroke="none"/><path d="M147.31,164,173,138.34a8,8,0,0,1,11.31,0L224,178.06"/><path d="M32,168.69l54.34-54.35a8,8,0,0,1,11.32,0L191.31,208"/></svg></span>
-              <div><h3>Puzzle history</h3><p>Remember your finished puzzles by adding a photo, ratings and&nbsp;notes.</p></div>
+              <div><h3>Log finished puzzles</h3><p>Remember your finished puzzles by adding a photo, ratings and&nbsp;notes.</p></div>
             </li>
           </ul>
         </div>
@@ -117,15 +103,15 @@
           <ul class="features">
             <li class="feature">
               <span class="icon-circle" style="background: var(--piece-lavender)"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" aria-hidden="true"><path d="M192,120a59.91,59.91,0,0,1,48,24"/><path d="M16,144a59.91,59.91,0,0,1,48-24"/><circle cx="128" cy="144" r="40"/><path d="M72,216a65,65,0,0,1,112,0"/><path d="M161,80a32,32,0,1,1,31,40"/><path d="M64,120A32,32,0,1,1,95,80"/></svg></span>
-              <div><h3>Puzzle groups</h3><p>Start a puzzle group with your&nbsp;friends.</p></div>
+              <div><h3>Puzzle groups</h3><p>A shared space to browse each other’s collections and plan what to build&nbsp;next.</p></div>
             </li>
             <li class="feature">
               <span class="icon-circle" style="background: var(--piece-apricot)"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" aria-hidden="true"><polyline points="176 144 208 176 176 208"/><line x1="48" y1="176" x2="208" y2="176"/><polyline points="80 112 48 80 80 48"/><line x1="208" y1="80" x2="48" y2="80"/></svg></span>
-              <div><h3>Swap puzzles</h3><p>Pass your puzzles around and try the ones your friends&nbsp;loved.</p></div>
+              <div><h3>Puzzle swaps</h3><p>Your group’s puzzles, passed around so you can try the ones your friends&nbsp;loved.</p></div>
             </li>
             <li class="feature">
               <span class="icon-circle" style="background: var(--piece-melon)"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" aria-hidden="true"><line x1="40" y1="64" x2="216" y2="64"/><line x1="40" y1="128" x2="136" y2="128"/><line x1="40" y1="192" x2="136" y2="192"/><polygon points="240 160 176 200 176 120 240 160"/></svg></span>
-              <div><h3>Take turns</h3><p>Save your spot for the puzzle your whole group&nbsp;loves.</p></div>
+              <div><h3>Waitlists</h3><p>A saved spot in line for a puzzle that’s still making the rounds in your&nbsp;group.</p></div>
             </li>
           </ul>
         </div>
@@ -133,7 +119,7 @@
     </div>
 
     <section class="closing">
-      <h2>Get in on the<br class="phone-br"> action and try<br class="phone-br"> Piecemates&nbsp;today!</h2>
+      <h2>Help shape Piecemates.</h2>
       <a class="button" href="#" data-testflight>Join the beta</a>
       <p class="meta-line">Coming soon to&nbsp;iPhone.</p>
     </section>
