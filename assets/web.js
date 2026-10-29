@@ -23,64 +23,102 @@
   ];
   var COLORS = ["blush", "apricot", "sand", "honey", "melon", "roseClay", "lavender", "sage"];
 
-  var HOLD = 700;     // the pile sits still
-  var GLIDE = 1000;   // then each piece glides out to its edge (Zoë, Oct 28: smooth, not stop-motion)
-  var STAGGER = 200;  // pieces leave up to this much apart
-  var EASE = "cubic-bezier(0.22, 0.8, 0.3, 1)";
+  // Opening (handoff, Oct 29 10:15): the pile holds, then each piece hops to
+  // its spot in 8 stop-motion poses, 125 ms apart, starting 0–2 frames late.
+  var HOLD = 700;
+  var FRAMES = 8;
+  var FRAME = 125;
+  var NAV_FADE = 300;
+  var HERO_STEP = 80;     // hero lines fade in and rise 8, this far apart
+  var HERO_RISE = 400;
 
   function rand(a, b) { return a + Math.random() * (b - a); }
   function pick(list) { return list[Math.floor(Math.random() * list.length)]; }
   function isPhone() { return window.innerWidth < 768; }
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
 
-  // Rectangles (in table coordinates) the pieces must stay 40 away from:
-  // the nav and every line of the hero, plus the app screens.
-  function keepOut() {
+  // Rectangles (in table coordinates) the pieces stay clear of. On phones the
+  // cards and sheets are nearly full width, so pieces may sit behind them
+  // (peeking out at the table edge) but skip the rows with section titles and
+  // the closing line.
+  function keepOut(phone) {
     var t = table.getBoundingClientRect();
+    var W = table.clientWidth;
     var rects = [];
-    function add(r, margin) {
-      if (r.width && r.height) rects.push({ l: r.left - t.left - margin, t: r.top - t.top - margin, r: r.right - t.left + margin, b: r.bottom - t.top + margin });
+    function add(r, margin, fullRow) {
+      if (!r.width || !r.height) return;
+      rects.push({
+        l: fullRow ? -Infinity : r.left - t.left - margin,
+        r: fullRow ? Infinity : r.right - t.left + margin,
+        t: r.top - t.top - margin,
+        b: r.bottom - t.top + margin
+      });
+    }
+    function lines(el, margin) {
+      var range = document.createRange();
+      range.selectNodeContents(el);
+      Array.prototype.forEach.call(range.getClientRects(), function (r) { add(r, margin); });
     }
     add(nav.getBoundingClientRect(), 40);
     document.querySelectorAll(".hero > *").forEach(function (el) {
-      if (el.matches(".button")) { add(el.getBoundingClientRect(), 40); return; }
-      var range = document.createRange();
-      range.selectNodeContents(el);
-      Array.prototype.forEach.call(range.getClientRects(), function (r) { add(r, 40); });
+      if (el.matches(".button")) add(el.getBoundingClientRect(), 40); else lines(el, 40);
     });
-    document.querySelectorAll(".screens-row, .sheet").forEach(function (el) { add(el.getBoundingClientRect(), 16); });
+    document.querySelectorAll(".screens-row").forEach(function (el) { add(el.getBoundingClientRect(), phone ? 16 : 40); });
+    document.querySelectorAll(".section-head, .closing > *").forEach(function (el) { add(el.getBoundingClientRect(), 40, phone); });
+    if (!phone) document.querySelectorAll(".sheet-card, .sheet").forEach(function (el) { add(el.getBoundingClientRect(), 40); });
     return rects;
   }
 
-  // A random scatter along the table's left, right and top edges, inside the
-  // first screen: at least 62 apart (54 on phones), clear of the nav and hero.
+  function firstScreenHeight() {
+    return Math.min(table.clientHeight, window.innerHeight - table.getBoundingClientRect().top - window.scrollY);
+  }
+
+  // A random scatter: along the left, right and top edges in the first screen,
+  // then down both side edges to the bottom of the table (handoff, Oct 29 10:16).
   function scatter() {
     var phone = isPhone();
-    var count = phone ? 20 : 36;
     var gap = phone ? 54 : 62;
-    var depth = phone ? 20 : 56;   // how far in from the edge a piece's center may sit
+    var depth = phone ? 20 : 44;     // how far in from the edge a piece's center may sit
     var W = table.clientWidth;
-    var H = Math.min(table.clientHeight, window.innerHeight - table.getBoundingClientRect().top - window.scrollY);
-    var avoid = keepOut();
-    var half = 31;                 // half of a piece's 62 box
+    var H = table.clientHeight;
+    var first = firstScreenHeight();
+    var avoid = keepOut(phone);
+    var half = 31;                   // half of a piece's 62 box
     var spots = [];
 
+    function fits(x, y) {
+      return spots.every(function (s) { return Math.hypot(s.x - x, s.y - y) >= gap; }) &&
+        avoid.every(function (r) { return x + half < r.l || x - half > r.r || y + half < r.t || y - half > r.b; });
+    }
+    function turn() { return rand(-35, 35); }
+
+    // First screen: up to 36 (20 on phones), the ones that come from the pile.
+    var count = phone ? 20 : 36;
     for (var tries = 0; tries < 4000 && spots.length < count; tries++) {
       var edge = Math.random() < (phone ? 0.15 : 0.3) ? "top" : (Math.random() < 0.5 ? "left" : "right");
       var x, y;
       if (edge === "top") { x = rand(0, W); y = rand(-12, depth); }
-      else { x = edge === "left" ? rand(-12, depth) : rand(W - depth, W + 12); y = rand(0, H - half); }
-
-      var ok = spots.every(function (s) { return Math.hypot(s.x - x, s.y - y) >= gap; });
-      ok = ok && avoid.every(function (r) { return x + half < r.l || x - half > r.r || y + half < r.t || y - half > r.b; });
-      if (ok) spots.push({ x: x, y: y, turn: pick([0, 90, 180, 270]) + rand(-10, 10) });
+      else { x = edge === "left" ? rand(-12, depth) : rand(W - depth, W + 12); y = rand(0, first - half); }
+      if (fits(x, y)) spots.push({ x: x, y: y, turn: turn(), first: true });
     }
+
+    // Further down: each side edge, about 70–110 apart, to the bottom.
+    ["left", "right"].forEach(function (side) {
+      for (var y = first + rand(0, 40); y < H - half; y += rand(70, 110)) {
+        for (var k = 0; k < 6; k++) {
+          var x = side === "left" ? rand(-12, depth) : rand(W - depth, W + 12);
+          var yy = y + rand(-12, 12);
+          if (fits(x, yy)) { spots.push({ x: x, y: yy, turn: turn(), first: false }); break; }
+        }
+      }
+    });
     return spots;
   }
 
   var layer, pieces = [], timers = [];
 
   function makePieces(spots) {
-    if (timers.length) showPage();  // a resize mid-opening skips the rest of it
+    if (timers.length) finishOpening();  // a resize mid-opening skips the rest of it
     timers.forEach(clearTimeout);
     timers = [];
     if (layer) layer.remove();
@@ -102,7 +140,7 @@
       layer.appendChild(svg);
       return { el: svg, w: w, h: h, spot: spot };
     });
-    table.appendChild(layer);
+    table.insertBefore(layer, table.firstChild);   // under the page content
   }
 
   function place(p, x, y, turn) {
@@ -113,26 +151,69 @@
     pieces.forEach(function (p) { place(p, p.spot.x, p.spot.y, p.spot.turn); });
   }
 
-  // Piled in the middle of the first screen, a hold, then the pieces glide
-  // out to the edges. The nav and the rest of the page fade in once the last one lands.
+  // The first-screen pieces start piled in the middle of the first screen and
+  // hop out; pieces further down are already in place. When the last one
+  // lands the nav fades in, then the hero lines one after another.
   function clearTable() {
-    var W = table.clientWidth;
-    var H = Math.min(table.clientHeight, window.innerHeight - table.getBoundingClientRect().top - window.scrollY);
-    var cx = W / 2, cy = H / 2;
+    var cx = table.clientWidth / 2, cy = firstScreenHeight() / 2;
+    var movers = pieces.filter(function (p) { return p.spot.first; });
+    var lastDelay = 0;
     pieces.forEach(function (p) {
+      if (!p.spot.first) { place(p, p.spot.x, p.spot.y, p.spot.turn); return; }
       p.pile = { x: cx + rand(-56, 56), y: cy + rand(-40, 40), turn: rand(0, 360) };
+      p.delay = Math.floor(rand(0, 3));
+      lastDelay = Math.max(lastDelay, p.delay);
       place(p, p.pile.x, p.pile.y, p.pile.turn);
     });
-    timers.push(setTimeout(function () {
-      pieces.forEach(function (p) {
-        p.el.style.transition = "transform " + GLIDE + "ms " + EASE + " " + Math.round(rand(0, STAGGER)) + "ms";
-        place(p, p.spot.x, p.spot.y, p.spot.turn);
-      });
-    }, HOLD));
-    timers.push(setTimeout(showPage, HOLD + STAGGER + GLIDE));
+    for (var f = 1; f <= FRAMES + lastDelay; f++) {
+      (function (f) {
+        timers.push(setTimeout(function () {
+          movers.forEach(function (p) {
+            var k = f - p.delay;
+            if (k < 1 || k > FRAMES) return;
+            if (k === FRAMES) { place(p, p.spot.x, p.spot.y, p.spot.turn); return; }
+            var e = easeOutCubic(k / FRAMES);
+            place(p,
+              p.pile.x + (p.spot.x - p.pile.x) * e + rand(-3, 3),
+              p.pile.y + (p.spot.y - p.pile.y) * e + rand(-3, 3),
+              p.pile.turn + (p.spot.turn - p.pile.turn) * e + rand(-4, 4));
+          });
+        }, HOLD + (f - 1) * FRAME));
+      })(f);
+    }
+    var landed = HOLD + (FRAMES + lastDelay - 1) * FRAME;
+    timers.push(setTimeout(function () { root.classList.add("show-nav"); }, landed));
+    timers.push(setTimeout(function () { root.classList.add("show-page"); }, landed + NAV_FADE));
+    timers.push(setTimeout(finishOpening, landed + NAV_FADE + HERO_RISE + 3 * HERO_STEP));
   }
 
-  function showPage() { root.classList.remove("intro"); }
+  function finishOpening() {
+    timers = [];
+    root.classList.remove("intro", "show-nav", "show-page");
+    if (scrolled) showScreens(false);
+  }
+
+  // ---------- App screens and first scroll ----------
+
+  // The app screens wait for the visitor's first scroll, then fade in and rise
+  // 16, the middle phone first. If the page loads already scrolled, they show.
+  var scrolled = window.scrollY > 0;
+  var firstScrollHooks = [];
+
+  function showScreens(animate) {
+    if (!root.classList.contains("screens-wait")) return;
+    if (!animate) root.classList.add("no-anim");
+    root.classList.remove("screens-wait");
+    if (!animate) requestAnimationFrame(function () { root.classList.remove("no-anim"); });
+  }
+
+  function onFirstScroll() {
+    if (scrolled) return;
+    scrolled = true;
+    window.removeEventListener("scroll", onFirstScroll);
+    if (!root.classList.contains("intro")) showScreens(true);   // else when the opening ends
+    firstScrollHooks.forEach(function (fn) { fn(); });
+  }
 
   // ---------- Dotted lines ----------
 
@@ -156,9 +237,11 @@
 
   // Once per visit, when a section is about a third in view: lines draw out
   // from the title a dash at a time, the title rises, then the features.
+  // Never before the first scroll.
   function setUpReveal() {
     if (reduceMotion || !("IntersectionObserver" in window)) return;
     var sections = document.querySelectorAll(".section");
+    if (!sections.length) return;
     sections.forEach(function (section) {
       section.querySelectorAll(".feature").forEach(function (f, i) { f.style.setProperty("--i", i); });
       section.classList.add("reveal");
@@ -170,7 +253,8 @@
         io.unobserve(e.target);
       });
     }, { threshold: 0.33 });
-    sections.forEach(function (s) { io.observe(s); });
+    function observe() { sections.forEach(function (s) { io.observe(s); }); }
+    if (scrolled) observe(); else firstScrollHooks.push(observe);
   }
 
   // ---------- Start ----------
@@ -181,12 +265,14 @@
     clearTimeout(window.introSafety);   // the opening is running, so it decides when the page shows
     sizeDots();
     setUpReveal();
+    window.addEventListener("scroll", onFirstScroll, { passive: true });
+    if (scrolled) showScreens(false);
     makePieces(scatter());
     // On a very slow load the safety timer may already have shown the page;
     // then the table is simply cleared, so the pieces never fly over text.
     if (reduceMotion || !root.classList.contains("intro")) {
       settle();
-      showPage();
+      finishOpening();
     } else {
       clearTable();
     }

@@ -5,17 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Piecemates</title>
 <meta name="description" content="Piecemates is the companion that keeps track of every jigsaw, from the moment you open the box to the finished picture. Coming soon to iPhone.">
-<link rel="stylesheet" href="assets/web.css?v=5">
+<link rel="stylesheet" href="assets/web.css?v=6">
 <link rel="icon" href="/favicon.svg?v=4" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico?v=4" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4">
 <script>
-  // The opening animation hides everything but the table and pieces until the
-  // pieces have landed (web.js). If Reduce Motion is on, or web.js never runs, it all shows.
-  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    document.documentElement.classList.add("intro");
-    window.introSafety = setTimeout(function () { document.documentElement.classList.remove("intro"); }, 4000);
-  }
+  // The opening (web.js) plays on the first visit to Home in a browser session,
+  // and on a refresh. Coming back from another page shows the settled table.
+  // Until the pieces land only the table and pieces show; the app screens then
+  // wait for the first scroll. Reduce Motion, or no JavaScript: all visible.
+  (function () {
+    var root = document.documentElement;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var nav = performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
+    var seen = false;
+    try { seen = sessionStorage.getItem("pm-opening") === "seen"; sessionStorage.setItem("pm-opening", "seen"); } catch (e) {}
+    if (seen && !(nav && nav.type === "reload")) return;
+    root.classList.add("intro", "screens-wait");
+    window.introSafety = setTimeout(function () { root.classList.remove("intro", "screens-wait"); }, 4000);
+  })();
   // Home always opens at the top, so the opening is seen even after a refresh
   // further down (Zoë, Oct 28). Links to a spot on the page (#…) still go there.
   if ("scrollRestoration" in history && !location.hash) history.scrollRestoration = "manual";
@@ -122,6 +130,6 @@
   <p><span class="group">Piecemates by Zoë Morken ·</span> <span class="group"><a href="mailto:piecematesapp@gmail.com">piecematesapp@gmail.com</a> ·</span> <span class="group"><a href="/support/">Support</a> · <a href="/privacy/">Privacy Policy</a> · <a href="/terms/">Terms of Service</a></span></p>
 </footer>
 
-<script src="assets/web.js?v=5"></script>
+<script src="assets/web.js?v=6"></script>
 </body>
 </html>

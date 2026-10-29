@@ -415,17 +415,38 @@ a { color: var(--link); text-underline-offset: 3px; }
   .closing { margin-top: 64px; padding: 0 8px; }
 }
 
-/* Pieces (Web/PuzzlePiece): flat fills, no outline, shadow or grain. */
-.pieces { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+/* Pieces (Web/PuzzlePiece): flat fills, no outline, shadow or grain. They sit
+   under the page content, so on phones the lower ones peek out from behind
+   the cards and sheets at the table edge. */
+.pieces { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 .piece { position: absolute; left: 0; top: 0; display: block; }
+main { position: relative; z-index: 1; }
 
-/* Opening: only the table and pieces show until the pieces have landed; then
-   the nav, all the page content and the footer fade in together (Zoë, Oct 28). */
-.nav, main, .footer { transition: opacity 300ms ease-out; }
-.intro .nav, .intro main, .intro .footer { opacity: 0; pointer-events: none; }
+/* Opening (Home, first visit in a browser session): only the table and pieces
+   show. The nav fades in as the last piece lands, then the hero lines rise in
+   one after another, and the rest of the page appears with them. */
+.intro .nav, .intro .hero > *, .intro .sections, .intro .closing, .intro .footer { opacity: 0; pointer-events: none; }
+.intro .hero > * { transform: translateY(8px); }
+.intro.show-nav .nav { opacity: 1; pointer-events: auto; transition: opacity 300ms ease-out; }
+.intro.show-page .hero > *, .intro.show-page .sections, .intro.show-page .closing, .intro.show-page .footer { opacity: 1; transform: none; pointer-events: auto; }
+.intro.show-page .hero > * { transition: opacity 400ms ease-out, transform 400ms ease-out; }
+.intro.show-page .hero .lead { transition-delay: 80ms; }
+.intro.show-page .hero .button { transition-delay: 160ms; }
+.intro.show-page .hero .meta-line { transition-delay: 240ms; }
+
+/* The app screens wait for the first scroll, then fade in and rise 16, the
+   middle phone first and the side phones 80 ms later. */
+.phone { transition: opacity 500ms ease-out, transform 500ms ease-out; }
+.phone.side-left, .phone.side-right { transition-delay: 80ms; }
+.screens-wait .phone { opacity: 0; transform: translateY(16px); }
+.no-anim .phone { transition: none; }
+
+/* Support, Privacy and Terms: the sheet arrives gently on every load. */
+.arrive .sheet { animation: arrive 250ms ease-out both; }
+@keyframes arrive { from { opacity: 0; transform: translateY(8px); } }
 
 /* Scroll reveal, once per visit. The page is complete without it: these
-   start states only apply after home.js adds .reveal. */
+   start states only apply after web.js adds .reveal. */
 .reveal .dots.sized.left { clip-path: inset(0 0 0 calc(var(--w) + 3px)); }
 .reveal .dots.sized.right { clip-path: inset(0 calc(var(--w) + 3px) 0 0); }
 .reveal .section-title { opacity: 0; transform: translateY(8px); }
@@ -441,6 +462,8 @@ a { color: var(--link); text-underline-offset: 3px; }
 @keyframes rise { to { opacity: 1; transform: none; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .intro .nav, .intro main, .intro .footer { opacity: 1; pointer-events: auto; }
+  .intro .nav, .intro .hero > *, .intro .sections, .intro .closing, .intro .footer { opacity: 1; transform: none; pointer-events: auto; }
+  .screens-wait .phone { opacity: 1; transform: none; }
+  .arrive .sheet { animation: none; }
   .reveal .dots.sized, .reveal .section-title, .reveal .feature { clip-path: none; opacity: 1; transform: none; animation: none; }
 }

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Privacy Policy · Piecemates</title>
 <meta name="description" content="Privacy Policy for Piecemates, the puzzle journal for iPhone.">
-<link rel="stylesheet" href="../assets/web.css?v=5">
+<link rel="stylesheet" href="../assets/web.css?v=6">
 <link rel="icon" href="/favicon.svg?v=4" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico?v=4" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4">
@@ -13,6 +13,8 @@
   // Pages always open at the top after a refresh (Zoë, Oct 28). Links to a
   // spot on the page (#…) still go there.
   if ("scrollRestoration" in history && !location.hash) history.scrollRestoration = "manual";
+  // The sheet fades in and rises 8 on every load (handoff, Oct 29 10:24).
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("arrive");
 </script>
 </head>
 <body>
@@ -189,6 +191,6 @@
   <p><span class="group">Piecemates by Zoë Morken ·</span> <span class="group"><a href="mailto:piecematesapp@gmail.com">piecematesapp@gmail.com</a> ·</span> <span class="group"><a href="/support/">Support</a> · <a href="/privacy/">Privacy Policy</a> · <a href="/terms/">Terms of Service</a></span></p>
 </footer>
 
-<script src="../assets/web.js?v=5"></script>
+<script src="../assets/web.js?v=6"></script>
 </body>
 </html>
