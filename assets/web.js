@@ -59,9 +59,12 @@
       range.selectNodeContents(el);
       Array.prototype.forEach.call(range.getClientRects(), function (r) { add(r, margin); });
     }
-    add(nav.getBoundingClientRect(), 40);
+    // Clearance from the nav and hero words: 40, or 12 on phones, where the
+    // hero runs almost edge to edge and 40 left no room for pieces (Zoë, Oct 29).
+    var clear = phone ? 12 : 40;
+    add(nav.getBoundingClientRect(), clear);
     document.querySelectorAll(".hero > *").forEach(function (el) {
-      if (el.matches(".button")) add(el.getBoundingClientRect(), 40); else lines(el, 40);
+      if (el.matches(".button")) add(el.getBoundingClientRect(), clear); else lines(el, clear);
     });
     document.querySelectorAll(".screens-row").forEach(function (el) { add(el.getBoundingClientRect(), phone ? 16 : 40); });
     document.querySelectorAll(".section-head, .closing > *").forEach(function (el) { add(el.getBoundingClientRect(), 40, phone); });
