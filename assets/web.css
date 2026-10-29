@@ -95,7 +95,7 @@ a { color: var(--link); text-underline-offset: 3px; }
   /* The app's paper grain at 18%, on the table only (never on pieces or
      sheets). The 18% is baked into the image and painted on the table itself:
      a separate see-through layer showed hairlines at tile edges in Chrome. */
-  background: url("paper-grain-18.png") 0 0 / 256px 256px repeat, var(--table);
+  background: url("paper-grain-18.png") 0 0 / var(--grain-px, 256px) var(--grain-px, 256px) repeat, var(--table);
   overflow: hidden;
   isolation: isolate;
   padding-bottom: 96px;
@@ -213,7 +213,8 @@ a { color: var(--link); text-underline-offset: 3px; }
   line-height: 22px;
 }
 .footer p { margin: 0; }
-.footer a { color: var(--meta); }
+.footer a { color: var(--meta); text-decoration: none; }
+.footer a:hover, .footer a:focus-visible { text-decoration: underline; }   /* underline only on hover (Zoë, Oct 29) */
 .footer .group { white-space: nowrap; }
 
 @media (max-width: 767px) {

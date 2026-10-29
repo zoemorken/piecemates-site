@@ -17,7 +17,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Piecemates: the iPhone app for tracking your jigsaw puzzles. The Piecemates logo on paper, with puzzle pieces around the edges.">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="assets/web.css?v=16">
+<link rel="stylesheet" href="assets/web.css?v=17">
 <link rel="icon" href="/favicon.svg?v=5" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico?v=5" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4">
@@ -39,6 +39,8 @@
   // Home always opens at the top, so the opening is seen even after a refresh
   // further down (Zoë, Oct 28). Links to a spot on the page (#…) still go there.
   if ("scrollRestoration" in history && !location.hash) history.scrollRestoration = "manual";
+  // Grain at the screen's own pixel size, so Chrome never resizes it (Oct 29: lines at some zooms).
+  document.documentElement.style.setProperty("--grain-px", 512 / (window.devicePixelRatio || 1) + "px");
 </script>
 </head>
 <body>
@@ -142,6 +144,6 @@
   <p><span class="group">Piecemates by Zoë Morken ·</span> <span class="group"><a href="mailto:piecematesapp@gmail.com">piecematesapp@gmail.com</a> ·</span> <span class="group"><a href="/support/">Support</a> · <a href="/privacy/">Privacy Policy</a> · <a href="/terms/">Terms of Service</a></span></p>
 </footer>
 
-<script src="assets/web.js?v=13"></script>
+<script src="assets/web.js?v=17"></script>
 </body>
 </html>

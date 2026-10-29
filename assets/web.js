@@ -391,6 +391,8 @@
 
     var timer;
     window.addEventListener("resize", function () {
+      // Browser zoom changes the pixel ratio; keep the grain at screen pixels.
+      root.style.setProperty("--grain-px", 512 / (window.devicePixelRatio || 1) + "px");
       clearTimeout(timer);
       timer = setTimeout(function () {
         sizeDots();
