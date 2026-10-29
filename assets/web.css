@@ -449,21 +449,19 @@ main { position: relative; z-index: 1; }
    start states only apply after web.js adds .reveal. */
 .reveal .dots.sized.left { clip-path: inset(0 0 0 calc(var(--w) + 3px)); }
 .reveal .dots.sized.right { clip-path: inset(0 calc(var(--w) + 3px) 0 0); }
-.reveal .section-title { opacity: 0; transform: translateY(8px); }
+.reveal .section-title, .reveal .sheet-card { opacity: 0; transform: translateY(8px); }
 .reveal .feature { opacity: 0; transform: translateY(16px); }
 
-.revealed .dots.sized.left { animation: draw-left 600ms steps(var(--n), jump-end) forwards; }
-.revealed .dots.sized.right { animation: draw-right 600ms steps(var(--n), jump-end) forwards; }
-.revealed .section-title { animation: rise 400ms ease-out forwards; }
+/* web.js draws the lines a whole dash at a time (it sets the clip per frame).
+   The card comes in with its title (Zoë, Oct 29). */
+.revealed .section-title, .revealed .sheet-card { animation: rise 400ms ease-out forwards; }
 .revealed .feature { animation: rise 400ms ease-out forwards; animation-delay: calc(600ms + var(--i) * 80ms); }
 
-@keyframes draw-left { to { clip-path: inset(0 0 0 0); } }
-@keyframes draw-right { to { clip-path: inset(0 0 0 0); } }
 @keyframes rise { to { opacity: 1; transform: none; } }
 
 @media (prefers-reduced-motion: reduce) {
   .intro .nav, .intro .hero > *, .intro .sections, .intro .closing, .intro .footer { opacity: 1; transform: none; pointer-events: auto; }
   .screens-wait .phone { opacity: 1; transform: none; }
   .arrive .sheet { animation: none; }
-  .reveal .dots.sized, .reveal .section-title, .reveal .feature { clip-path: none; opacity: 1; transform: none; animation: none; }
+  .reveal .dots.sized, .reveal .section-title, .reveal .sheet-card, .reveal .feature { clip-path: none; opacity: 1; transform: none; animation: none; }
 }

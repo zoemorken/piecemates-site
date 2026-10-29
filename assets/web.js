@@ -250,11 +250,32 @@
       entries.forEach(function (e) {
         if (!e.isIntersecting) return;
         e.target.classList.add("revealed");
+        drawLines(e.target);
         io.unobserve(e.target);
       });
     }, { threshold: 0.33 });
     function observe() { sections.forEach(function (s) { io.observe(s); }); }
     if (scrolled) observe(); else firstScrollHooks.push(observe);
+  }
+
+  // The two lines grow outward from the title over 600 ms, one whole dash
+  // (6 px: 3 on, 3 off) at a time, by moving their clip edge in dash steps.
+  function drawLines(section) {
+    var lines = section.querySelectorAll(".dots.sized");
+    if (!lines.length) return;
+    var n = parseInt(lines[0].style.getPropertyValue("--n"), 10) || 0;
+    var started = null;
+    function frame(now) {
+      if (started === null) started = now;
+      var k = Math.min(n, Math.floor((now - started) / 600 * n) + 1);
+      var hidden = (n - k) * 6 + "px";
+      lines.forEach(function (line) {
+        line.style.clipPath = k >= n ? "none" :
+          line.classList.contains("left") ? "inset(0 0 0 " + hidden + ")" : "inset(0 " + hidden + " 0 0)";
+      });
+      if (k < n) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
   }
 
   // ---------- Start ----------
