@@ -92,22 +92,13 @@ a { color: var(--link); text-underline-offset: 3px; }
   position: relative;
   margin: var(--gutter) var(--gutter) 0;
   border-radius: var(--table-radius);
-  background: var(--table);
+  /* The app's paper grain at 18%, on the table only (never on pieces or
+     sheets). The 18% is baked into the image and painted on the table itself:
+     a separate see-through layer showed hairlines at tile edges in Chrome. */
+  background: url("paper-grain-18.png") 0 0 / 256px 256px repeat, var(--table);
   overflow: hidden;
   isolation: isolate;
   padding-bottom: 96px;
-}
-
-/* The app's paper grain at 18%, on the table only (never on pieces or sheets). */
-.table::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: url("paper-grain.png") repeat;
-  background-size: 256px 256px;
-  opacity: 0.18;
-  pointer-events: none;
 }
 
 /* Nav (Web/Nav): a glass pill that hugs its content, centered, 32 from the top.
