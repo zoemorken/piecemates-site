@@ -169,17 +169,34 @@ a { color: var(--link); text-underline-offset: 3px; }
   text-decoration: none;
   font: 500 16px/24px "Plus Jakarta Sans", system-ui, sans-serif;
 }
-/* Hover (Zoë, Oct 29): a lighter blue fills the button from left to right.
-   The background is twice the button's width, hover half and base half, and
-   slides across. Pointer devices only. */
-.button {
-  background: linear-gradient(to right, var(--button-hover) 50%, var(--button-bg) 50%) right / 200% 100% no-repeat;
-  transition: background-position 300ms ease-out;
+/* Hover (Zoë, Oct 29): a puzzle-piece wipe. A lighter blue slides in from the
+   left with a puzzle tab as its leading edge (420 ms), and the button gives a
+   tiny click as it lands. The fill sits under the label (z-index -1 inside the
+   isolated button). Keyboard focus fills too; pointer hover only on devices
+   that have it. */
+.button { position: relative; overflow: hidden; isolation: isolate; }
+.button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  width: calc(100% + 16px);
+  background: var(--button-hover);
+  transform: translateX(calc(-100% - 2px));
+  transition: transform 420ms cubic-bezier(0.22, 0.8, 0.3, 1);
+  pointer-events: none;
+  --tab: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='24' viewBox='0 0 16 24'%3E%3Cpath d='M0 6C2 6 3 5 3 3.5C3 1.5 5 0 8 0S13 1.5 13 3.5V20.5C13 22.5 11 24 8 24S3 22.5 3 20.5C3 19 2 18 0 18Z' fill='%23000'/%3E%3C/svg%3E");
+  -webkit-mask: linear-gradient(#000 0 0) left / calc(100% - 16px) 100% no-repeat, var(--tab) right center / 16px 24px no-repeat;
+  mask: linear-gradient(#000 0 0) left / calc(100% - 16px) 100% no-repeat, var(--tab) right center / 16px 24px no-repeat;
 }
 @media (hover: hover) {
-  .button:hover { background-position: left; }
+  .button:hover::before { transform: translateX(0); }
+  .button:hover { animation: click 420ms ease-out; }
 }
-.button:focus-visible { background-position: left; }   /* keyboard focus fills too */
+.button:focus-visible::before { transform: translateX(0); }
+@keyframes click { 0%, 80% { transform: none; } 90% { transform: scale(1.03); } 100% { transform: none; } }
 .button:active { transform: scale(0.98); }
 .button:focus-visible, .nav a:focus-visible, .footer a:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
 .nav .button { padding: 12px 16px; font-size: 14px; line-height: 20px; }
@@ -493,10 +510,12 @@ main { position: relative; z-index: 1; }
 
 /* The closing call to action steps in after the features: headline, then
    Join the beta, then Coming soon to iPhone (Zoë, Oct 29). */
+/* Transitions rather than an animation, so the button's hover click can't
+   cancel the step-in. */
 .closing.reveal > * { opacity: 0; transform: translateY(8px); }
-.closing.revealed > * { animation: rise 400ms ease-out forwards; }
-.closing.revealed > .button { animation-delay: 80ms; }
-.closing.revealed > .meta-line { animation-delay: 160ms; }
+.closing.revealed > * { opacity: 1; transform: none; transition: opacity 400ms ease-out, transform 400ms ease-out; }
+.closing.revealed > .button { transition-delay: 80ms; }
+.closing.revealed > .meta-line { transition-delay: 160ms; }
 
 @keyframes rise { to { opacity: 1; transform: none; } }
 
@@ -504,7 +523,8 @@ main { position: relative; z-index: 1; }
   .intro .nav, .intro .hero > *, .intro .sections, .intro .closing, .intro .footer { opacity: 1; transform: none; pointer-events: auto; }
   .screens-wait .phone { opacity: 1; transform: none; }
   .arrive .sheet { animation: none; }
-  .button { transition: none; }   /* the hover color still changes, without the sweep */
+  .button::before { transition: none; }   /* the color still changes, without the wipe */
+  .button:hover { animation: none; }
   .lines-done .icon-circle { animation: none; }
   .nav { transition: none; }
   .reveal .dots.sized, .reveal .section-title, .reveal .sheet-card, .reveal .feature, .closing.reveal > * { clip-path: none; opacity: 1; transform: none; animation: none; }
