@@ -22,10 +22,11 @@
   --marker: #cfbca8;
   --nav-fill: #ffffff99;
   --nav-stroke: #12384a14;
-  --nav-fill-solid: #ffffffd9;   /* once content slides under the nav */
+  --nav-fill-solid: #ffffffd9;   /* web/nav/fillSolid: once content slides under the nav */
+  --nav-link-hover: color-mix(in srgb, var(--text) 8%, transparent);   /* web/nav/linkHover */
   --button-bg: #135b73;
   --button-label: #ffffff;
-  --button-hover: #14707f;   /* color/accent, the site's link teal */
+  --button-hover: #14707f;   /* web/button/hover (color/accent, the site's link teal) */
   --piece-blush: #f3bfb0;
   --piece-apricot: #f9cba4;
   --piece-sand: #eed6ae;
@@ -55,7 +56,7 @@
     --nav-fill-solid: #0b2531e6;
     --button-bg: #b5d2d8;
     --button-label: #12384a;
-    --button-hover: color-mix(in srgb, #b5d2d8 55%, #ffffff);   /* a lighter Mist */
+    --button-hover: #d6e7ea;   /* web/button/hover: Mist mixed with white (design, Oct 29) */
     --piece-blush: #72473a;
     --piece-apricot: #78512d;
     --piece-sand: #705b36;
@@ -152,10 +153,10 @@ a { color: var(--link); text-underline-offset: 3px; }
   transition: background-color 150ms ease-out;
 }
 @media (hover: hover) {
-  .nav-links a:hover { background: color-mix(in srgb, var(--text) 8%, transparent); }
+  .nav-links a:hover { background: var(--nav-link-hover); }
 }
 /* Keyboard focus gets the same pill, plus the focus ring. */
-.nav-links a:focus-visible { background: color-mix(in srgb, var(--text) 8%, transparent); }
+.nav-links a:focus-visible { background: var(--nav-link-hover); }
 
 /* The app's primary button, in web/button colors. */
 .button {
