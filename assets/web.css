@@ -143,7 +143,18 @@ a { color: var(--link); text-underline-offset: 3px; }
   text-decoration: none;
   font: 600 14px/20px "Plus Jakarta Sans", system-ui, sans-serif;
 }
-.nav-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+/* Hover (Zoë, Oct 29): a soft pill in the text color at 8% fades in behind
+   the link. The padding and negative margin make the pill without moving the
+   links. Pointer devices only; phones have no hover. */
+.nav-links a {
+  margin: -6px -12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  transition: background-color 150ms ease-out;
+}
+@media (hover: hover) {
+  .nav-links a:hover { background: color-mix(in srgb, var(--text) 8%, transparent); }
+}
 
 /* The app's primary button, in web/button colors. */
 .button {
