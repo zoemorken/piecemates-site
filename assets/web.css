@@ -434,10 +434,10 @@ main { position: relative; z-index: 1; }
 .intro.show-page .hero .button { transition-delay: 160ms; }
 .intro.show-page .hero .meta-line { transition-delay: 240ms; }
 
-/* The app screens wait for the first scroll, then fade in and rise 16, the
-   middle phone first and the side phones 80 ms later. */
+/* The app screens wait for the first scroll, then fade in and rise 16: the
+   middle phone first, the side phones once it has risen (Zoë, Oct 29). */
 .phone { transition: opacity 500ms ease-out, transform 500ms ease-out; }
-.phone.side-left, .phone.side-right { transition-delay: 80ms; }
+.phone.side-left, .phone.side-right { transition-delay: 500ms; }
 .screens-wait .phone { opacity: 0; transform: translateY(16px); }
 .no-anim .phone { transition: none; }
 
@@ -453,9 +453,18 @@ main { position: relative; z-index: 1; }
 .reveal .feature { opacity: 0; transform: translateY(16px); }
 
 /* web.js draws the lines a whole dash at a time (it sets the clip per frame).
-   The card comes in with its title (Zoë, Oct 29). */
-.revealed .section-title, .revealed .sheet-card { animation: rise 400ms ease-out forwards; }
-.revealed .feature { animation: rise 400ms ease-out forwards; animation-delay: calc(600ms + var(--i) * 80ms); }
+   The title rises as they draw; the card follows once the lines are done
+   (Zoë, Oct 29), and its three features rise in as it settles. */
+.revealed .section-title { animation: rise 400ms ease-out forwards; }
+.lines-done .sheet-card { animation: rise 400ms ease-out forwards; }
+.lines-done .feature { animation: rise 400ms ease-out forwards; animation-delay: calc(200ms + var(--i) * 80ms); }
+
+/* The closing call to action steps in after the features: headline, then
+   Join the beta, then Coming soon to iPhone (Zoë, Oct 29). */
+.closing.reveal > * { opacity: 0; transform: translateY(8px); }
+.closing.revealed > * { animation: rise 400ms ease-out forwards; }
+.closing.revealed > .button { animation-delay: 80ms; }
+.closing.revealed > .meta-line { animation-delay: 160ms; }
 
 @keyframes rise { to { opacity: 1; transform: none; } }
 
@@ -463,5 +472,5 @@ main { position: relative; z-index: 1; }
   .intro .nav, .intro .hero > *, .intro .sections, .intro .closing, .intro .footer { opacity: 1; transform: none; pointer-events: auto; }
   .screens-wait .phone { opacity: 1; transform: none; }
   .arrive .sheet { animation: none; }
-  .reveal .dots.sized, .reveal .section-title, .reveal .sheet-card, .reveal .feature { clip-path: none; opacity: 1; transform: none; animation: none; }
+  .reveal .dots.sized, .reveal .section-title, .reveal .sheet-card, .reveal .feature, .closing.reveal > * { clip-path: none; opacity: 1; transform: none; animation: none; }
 }

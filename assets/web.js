@@ -196,7 +196,8 @@
   // ---------- App screens and first scroll ----------
 
   // The app screens wait for the visitor's first scroll, then fade in and rise
-  // 16, the middle phone first. If the page loads already scrolled, they show.
+  // 16, the middle phone first, then the side phones. If the page loads
+  // already scrolled, they show.
   var scrolled = window.scrollY > 0;
   var firstScrollHooks = [];
 
@@ -236,33 +237,53 @@
   // ---------- Scroll reveal ----------
 
   // Once per visit, when a section is about a third in view: lines draw out
-  // from the title a dash at a time, the title rises, then the features.
+  // from the title a dash at a time as the title rises, then the card, then
+  // its features. The closing call to action steps in after that (headline,
+  // button, line), once it's in view and the last section's features are in.
   // Never before the first scroll.
+  var FEATURES_IN = 200 + 2 * 80 + 400;   // from the lines finishing to the last feature landing
+  var sections = [], closing = null, closingInView = false;
+
   function setUpReveal() {
     if (reduceMotion || !("IntersectionObserver" in window)) return;
-    var sections = document.querySelectorAll(".section");
+    sections = Array.prototype.slice.call(document.querySelectorAll(".section"));
     if (!sections.length) return;
     sections.forEach(function (section) {
       section.querySelectorAll(".feature").forEach(function (f, i) { f.style.setProperty("--i", i); });
       section.classList.add("reveal");
     });
+    closing = document.querySelector(".closing");
+    if (closing) closing.classList.add("reveal");
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (!e.isIntersecting) return;
+        io.unobserve(e.target);
+        if (e.target === closing) { closingInView = true; revealClosing(); return; }
         e.target.classList.add("revealed");
         drawLines(e.target);
-        io.unobserve(e.target);
       });
     }, { threshold: 0.33 });
-    function observe() { sections.forEach(function (s) { io.observe(s); }); }
+    function observe() {
+      sections.forEach(function (s) { io.observe(s); });
+      if (closing) io.observe(closing);
+    }
     if (scrolled) observe(); else firstScrollHooks.push(observe);
+  }
+
+  // Waits for the last section's features if that section is still coming in.
+  // (If someone jumped straight past it, the closing doesn't wait for it.)
+  function revealClosing() {
+    if (!closing || !closingInView || closing.classList.contains("revealed")) return;
+    var last = sections[sections.length - 1];
+    if (last && last.classList.contains("revealed") && !last.classList.contains("features-done")) return;
+    closing.classList.add("revealed");
   }
 
   // The two lines grow outward from the title over 600 ms, one whole dash
   // (6 px: 3 on, 3 off) at a time, by moving their clip edge in dash steps.
   function drawLines(section) {
     var lines = section.querySelectorAll(".dots.sized");
-    if (!lines.length) return;
+    if (!lines.length) { linesDone(section); return; }
     var n = parseInt(lines[0].style.getPropertyValue("--n"), 10) || 0;
     var started = null;
     function frame(now) {
@@ -274,8 +295,17 @@
           line.classList.contains("left") ? "inset(0 0 0 " + hidden + ")" : "inset(0 " + hidden + " 0 0)";
       });
       if (k < n) requestAnimationFrame(frame);
+      else linesDone(section);
     }
     requestAnimationFrame(frame);
+  }
+
+  function linesDone(section) {
+    section.classList.add("lines-done");   // the card and its features follow
+    setTimeout(function () {
+      section.classList.add("features-done");
+      revealClosing();
+    }, FEATURES_IN);
   }
 
   // ---------- Start ----------
