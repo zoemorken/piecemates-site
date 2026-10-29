@@ -216,6 +216,51 @@
     firstScrollHooks.forEach(function (fn) { fn(); });
   }
 
+  // ---------- Nav ----------
+
+  // The nav turns more solid once page content (the headline, or the sheet on
+  // text pages) slides up under it.
+  var firstContent = document.querySelector(".hero-title, main.sheet");
+  function updateNav() {
+    if (!firstContent) return;
+    var under = firstContent.getBoundingClientRect().top < nav.getBoundingClientRect().bottom + 8;
+    nav.classList.toggle("solid", under);
+  }
+
+  // ---------- Pieces nudge ----------
+
+  // With a mouse or trackpad, pieces within reach of the pointer lean away a
+  // little (up to 8 px and a few degrees), and settle back when it moves off.
+  var REACH = 90, PUSH = 8;
+  var canNudge = !reduceMotion && matchMedia("(hover: hover)").matches;
+  var pointer = null, nudgeQueued = false;
+
+  function nudgeFrame() {
+    nudgeQueued = false;
+    if (!canNudge || root.classList.contains("intro") || timers.length) return;
+    var t = table.getBoundingClientRect();
+    pieces.forEach(function (p) {
+      var dx = 0, dy = 0, dr = 0;
+      if (pointer) {
+        var px = pointer.x - t.left, py = pointer.y - t.top;
+        var vx = p.spot.x - px, vy = p.spot.y - py, d = Math.hypot(vx, vy);
+        if (d < REACH && d > 0.5) {
+          var f = (REACH - d) / REACH;
+          dx = vx / d * PUSH * f;
+          dy = vy / d * PUSH * f;
+          dr = (vx < 0 ? -1 : 1) * 6 * f;
+        }
+      }
+      if (!dx && !dy && !p.nudged) return;
+      p.nudged = !!(dx || dy);
+      p.el.classList.add("nudge");
+      place(p, p.spot.x + dx, p.spot.y + dy, p.spot.turn + dr);
+    });
+  }
+  function queueNudge() {
+    if (!nudgeQueued) { nudgeQueued = true; requestAnimationFrame(nudgeFrame); }
+  }
+
   // ---------- Dotted lines ----------
 
   // Each line runs from 24 beside the title (16 on phones) to the card's edge,
@@ -317,6 +362,22 @@
     sizeDots();
     setUpReveal();
     window.addEventListener("scroll", onFirstScroll, { passive: true });
+    updateNav();
+    var navQueued = false;
+    window.addEventListener("scroll", function () {
+      if (navQueued) return;
+      navQueued = true;
+      requestAnimationFrame(function () { navQueued = false; updateNav(); });
+      if (pointer) queueNudge();   // the page moved under a still pointer
+    }, { passive: true });
+    if (canNudge) {
+      document.addEventListener("pointermove", function (e) {
+        if (e.pointerType !== "mouse") return;
+        pointer = { x: e.clientX, y: e.clientY };
+        queueNudge();
+      }, { passive: true });
+      document.documentElement.addEventListener("pointerleave", function () { pointer = null; queueNudge(); });
+    }
     if (scrolled) showScreens(false);
     makePieces(scatter());
     // On a very slow load the safety timer may already have shown the page;

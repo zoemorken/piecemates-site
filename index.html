@@ -5,7 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Piecemates</title>
 <meta name="description" content="Piecemates is the companion that keeps track of every jigsaw, from the moment you open the box to the finished picture. Coming soon to iPhone.">
-<link rel="stylesheet" href="assets/web.css?v=12">
+<!-- Link previews (Messages, Slack, social). A preview picture (og:image,
+     1200 × 630) comes once design has drawn it. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Piecemates">
+<meta property="og:title" content="Piecemates">
+<meta property="og:description" content="Piecemates is the companion that keeps track of every jigsaw, from the moment you open the box to the finished picture. Coming soon to iPhone.">
+<meta property="og:url" content="https://piecemates.app/">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="assets/web.css?v=13">
 <link rel="icon" href="/favicon.svg?v=4" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico?v=4" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4">
@@ -62,9 +70,9 @@
 
     <div class="screens">
       <div class="screens-row">
-        <div class="phone side-left"><img src="assets/screens/mypuzzles.jpg?v=2" width="248" height="538" alt="My Puzzles in Piecemates: a list of puzzles with their brands, piece counts and progress."></div>
-        <div class="phone front"><img src="assets/screens/home.jpg?v=2" width="322" height="698" alt="Home in Piecemates: Good evening, Igor, a rating card, the puzzles currently being built and the 2026 goal."></div>
-        <div class="phone side-right"><img src="assets/screens/puzzle.jpg?v=2" width="248" height="538" alt="A puzzle page in Piecemates: Harbor Lights at Dusk with its box photo and the build timer at 1:24:08."></div>
+        <div class="phone side-left"><picture><source srcset="assets/screens/mypuzzles.avif?v=2" type="image/avif"><img src="assets/screens/mypuzzles.jpg?v=3" width="248" height="538" alt="My Puzzles in Piecemates: a list of puzzles with their brands, piece counts and progress."></picture></div>
+        <div class="phone front"><picture><source srcset="assets/screens/home.avif?v=2" type="image/avif"><img src="assets/screens/home.jpg?v=3" width="322" height="698" alt="Home in Piecemates: Good evening, Igor, a rating card, the puzzles currently being built and the 2026 goal."></picture></div>
+        <div class="phone side-right"><picture><source srcset="assets/screens/puzzle.avif?v=2" type="image/avif"><img src="assets/screens/puzzle.jpg?v=3" width="248" height="538" alt="A puzzle page in Piecemates: Harbor Lights at Dusk with its box photo and the build timer at 1:24:08."></picture></div>
       </div>
     </div>
 
@@ -130,6 +138,6 @@
   <p><span class="group">Piecemates by Zoë Morken ·</span> <span class="group"><a href="mailto:piecematesapp@gmail.com">piecematesapp@gmail.com</a> ·</span> <span class="group"><a href="/support/">Support</a> · <a href="/privacy/">Privacy Policy</a> · <a href="/terms/">Terms of Service</a></span></p>
 </footer>
 
-<script src="assets/web.js?v=10"></script>
+<script src="assets/web.js?v=13"></script>
 </body>
 </html>

@@ -22,6 +22,7 @@
   --marker: #cfbca8;
   --nav-fill: #ffffff99;
   --nav-stroke: #12384a14;
+  --nav-fill-solid: #ffffffd9;   /* once content slides under the nav */
   --button-bg: #135b73;
   --button-label: #ffffff;
   --button-hover: #14707f;   /* color/accent, the site's link teal */
@@ -51,6 +52,7 @@
     --link: #b5d2d8;
     --nav-fill: #0b25318c;
     --nav-stroke: #ffffff1f;
+    --nav-fill-solid: #0b2531e6;
     --button-bg: #b5d2d8;
     --button-label: #12384a;
     --button-hover: color-mix(in srgb, #b5d2d8 55%, #ffffff);   /* a lighter Mist */
@@ -126,7 +128,11 @@ a { color: var(--link); text-underline-offset: 3px; }
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   white-space: nowrap;
+  transition: background-color 200ms ease-out, box-shadow 200ms ease-out;
 }
+/* Once page content slides under it, the glass turns more solid with a soft
+   shadow so the links stay easy to read (Zoë, Oct 29). */
+.nav.solid { background: var(--nav-fill-solid); box-shadow: 0 4px 16px rgb(18 56 74 / 0.1); }
 
 .brand {
   display: flex;
@@ -157,6 +163,8 @@ a { color: var(--link); text-underline-offset: 3px; }
 @media (hover: hover) {
   .nav-links a:hover { background: color-mix(in srgb, var(--text) 8%, transparent); }
 }
+/* Keyboard focus gets the same pill, plus the focus ring. */
+.nav-links a:focus-visible { background: color-mix(in srgb, var(--text) 8%, transparent); }
 
 /* The app's primary button, in web/button colors. */
 .button {
@@ -173,13 +181,14 @@ a { color: var(--link); text-underline-offset: 3px; }
 /* Hover (Zoë, Oct 29): a lighter blue fills the button from left to right.
    The background is twice the button's width, hover half and base half, and
    slides across. Pointer devices only. */
+.button {
+  background: linear-gradient(to right, var(--button-hover) 50%, var(--button-bg) 50%) right / 200% 100% no-repeat;
+  transition: background-position 300ms ease-out;
+}
 @media (hover: hover) {
-  .button {
-    background: linear-gradient(to right, var(--button-hover) 50%, var(--button-bg) 50%) right / 200% 100% no-repeat;
-    transition: background-position 300ms ease-out;
-  }
   .button:hover { background-position: left; }
 }
+.button:focus-visible { background-position: left; }   /* keyboard focus fills too */
 .button:active { transform: scale(0.98); }
 .button:focus-visible, .nav a:focus-visible, .footer a:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
 .nav .button { padding: 12px 16px; font-size: 14px; line-height: 20px; }
@@ -324,6 +333,7 @@ a { color: var(--link); text-underline-offset: 3px; }
   width: calc(264 * var(--u));
   box-shadow: 0 calc(16 * var(--u)) calc(32 * var(--u)) rgb(18 56 74 / 0.18);
 }
+.phone picture { display: block; }
 .phone img {
   display: block;
   width: 100%;
@@ -482,6 +492,14 @@ main { position: relative; z-index: 1; }
 .lines-done .sheet-card { animation: rise 400ms ease-out forwards; }
 .lines-done .feature { animation: rise 400ms ease-out forwards; animation-delay: calc(200ms + var(--i) * 80ms); }
 
+/* Each feature's round icon snaps in as the feature rises, like a piece
+   clicking into place (Zoë, Oct 29). */
+.lines-done .icon-circle { animation: snap 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both; animation-delay: calc(200ms + var(--i) * 80ms); }
+@keyframes snap { from { transform: scale(0.6); } to { transform: none; } }
+
+/* Pieces near the pointer get a small nudge, like bumping the table. */
+.piece.nudge { transition: transform 250ms ease-out; }
+
 /* The closing call to action steps in after the features: headline, then
    Join the beta, then Coming soon to iPhone (Zoë, Oct 29). */
 .closing.reveal > * { opacity: 0; transform: translateY(8px); }
@@ -496,5 +514,7 @@ main { position: relative; z-index: 1; }
   .screens-wait .phone { opacity: 1; transform: none; }
   .arrive .sheet { animation: none; }
   .button { transition: none; }   /* the hover color still changes, without the sweep */
+  .lines-done .icon-circle { animation: none; }
+  .nav { transition: none; }
   .reveal .dots.sized, .reveal .section-title, .reveal .sheet-card, .reveal .feature, .closing.reveal > * { clip-path: none; opacity: 1; transform: none; animation: none; }
 }
