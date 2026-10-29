@@ -9,4 +9,5 @@ Change it there first, then copy it here.
   Policy has to change first.
 - Fonts (Parkinsans, Plus Jakarta Sans) are served from this site under the SIL
   Open Font License (`assets/licenses`), so pages make no third-party requests.
-- Colors and the paper grain match the app's Tabletop design tokens.
+- Colors match the app's Tabletop design tokens (Figma's Web variables). The
+  table is plain color: no paper grain, which drew lines in some browsers.
