@@ -348,17 +348,16 @@ a { color: var(--link); text-underline-offset: 3px; }
 .sheet a.quiet { color: inherit; text-decoration: none; }
 .sheet a.quiet:hover { text-decoration: underline; }
 
-/* Lists: a small meta-colored dot, 8 before the text, centered on the item. */
+/* Lists: a small meta-colored dot, 8 before the text, on the first line. */
 .sheet ul { display: flex; flex-direction: column; gap: 16px; margin: 0; padding: 0; list-style: none; }
 .sheet li { position: relative; padding-left: 20px; }
 .sheet li::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 50%;
+  top: 8px;   /* centered on the first line: half the 28 line height, minus 6 (design, Oct 30) */
   width: 12px;
   height: 12px;
-  margin-top: -6px;
   background: radial-gradient(circle, var(--meta) 3px, transparent 3.5px);
 }
 
@@ -367,7 +366,7 @@ a { color: var(--link); text-underline-offset: 3px; }
 
 @media (max-width: 767px) {
   .table.text-page { padding: 96px 8px 56px; }   /* 56 like Home, so the bottom row of pieces has room (Oct 30) */
-  .sheet { padding: 24px; }
+  .sheet { padding: 32px; }   /* phones: 32 (design, Oct 30) */
   .sheet h1 { font-size: 24px; line-height: 32px; }   /* as in the Privacy phone frame */
 }
 
@@ -521,7 +520,7 @@ a { color: var(--link); text-underline-offset: 3px; }
   .phone.front img { border-radius: 30px; }
   .sections { gap: 48px; width: calc(100% - 16px); }
   .section-head { gap: 16px; }
-  .sheet-card { padding: 24px; }
+  .sheet-card { padding: 32px; }   /* phones: 32 (design, Oct 30) */
   .features { grid-template-columns: 1fr; }
   .closing { margin-top: 64px; padding: 0 8px; }
 }
