@@ -344,9 +344,6 @@ a { color: var(--link); text-underline-offset: 3px; }
 .sheet h3 { margin: 0; font-size: 17px; line-height: 28px; font-weight: 600; }
 .sheet strong { font-weight: 600; }
 .sheet a { color: var(--link); }
-/* Support's email reads as plain text in its frame. */
-.sheet a.quiet { color: inherit; text-decoration: none; }
-.sheet a.quiet:hover { text-decoration: underline; }
 
 /* Lists: a small meta-colored dot, 8 before the text, on the first line. */
 .sheet ul { display: flex; flex-direction: column; gap: 16px; margin: 0; padding: 0; list-style: none; }

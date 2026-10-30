@@ -67,7 +67,10 @@
       if (el.matches(".button")) add(el.getBoundingClientRect(), clear); else lines(el, clear);
     });
     document.querySelectorAll(".screens-row").forEach(function (el) { add(el.getBoundingClientRect(), phone ? 16 : 40); });
-    document.querySelectorAll(".section-head, .closing > *").forEach(function (el) { add(el.getBoundingClientRect(), 40, phone); });
+    document.querySelectorAll(".section-head").forEach(function (el) { add(el.getBoundingClientRect(), 40, phone); });
+    document.querySelectorAll(".closing > *").forEach(function (el) {
+      if (!phone || el.matches(".button")) add(el.getBoundingClientRect(), clear); else lines(el, clear);
+    });
     if (!phone) document.querySelectorAll(".sheet-card, .sheet").forEach(function (el) { add(el.getBoundingClientRect(), 40); });
     return rects;
   }
@@ -110,9 +113,10 @@
       if (fits(x, y)) spots.push({ x: x, y: y, turn: turn(), first: true });
     }
 
-    // Along the bottom edge, every page and size (design, Oct 30): cut by the
-    // edge like the top row, about half to 60% showing, 90–110 apart (60–70 on
-    // phones), and kept 24 clear below the closing block or the last sheet.
+    // The bottom mirrors the top (Zoë, Oct 30, replacing design's full row):
+    // pieces cut by the bottom edge only in the corners, outside the nav's
+    // width as at the top, and on phones climbing up both sides from the
+    // bottom to just below the last card, kept 24 clear of the cards.
     // Measured from the layout, not the screen: during the opening or the
     // sheet's arrival these blocks are still shifted by their rise.
     function layoutBottom(el) {
@@ -120,17 +124,25 @@
       for (var n = el; n && n !== table; n = n.offsetParent) y += n.offsetTop;
       return y;
     }
-    var clearLine = -Infinity;
-    document.querySelectorAll(".closing, main.sheet, .sections").forEach(function (el) {
-      clearLine = Math.max(clearLine, layoutBottom(el) + 24);
+    var cardsEnd = 0;
+    document.querySelectorAll("main.sheet, .sections").forEach(function (el) {
+      cardsEnd = Math.max(cardsEnd, layoutBottom(el) + 24);
     });
-    for (var bx = rand(0, 30); bx < W + 20; bx += phone ? rand(60, 70) : rand(90, 110)) {
-      var shape = Math.floor(Math.random() * SHAPES.length), tn = turn();
-      var a = Math.abs(tn) * Math.PI / 180, sw = SHAPES[shape].w * SCALE, sh = SHAPES[shape].h * SCALE;
-      var bh = sw * Math.sin(a) + sh * Math.cos(a);           // height of the turned piece
-      var showing = Math.min(rand(0.5, 0.6), (H - clearLine) / bh);
-      if (showing < 0.3) continue;                            // no room above the edge here
-      spots.push({ x: bx, y: H - showing * bh + bh / 2, turn: tn, shape: shape, first: false });
+    var n = nav.getBoundingClientRect(), navL = n.left - t.left - half, navR = n.right - t.left + half;
+    var climbFrom = phone ? cardsEnd + half : H;
+    var bottomCount = spots.length + (phone ? Math.round(2 * (H - climbFrom) / 60) : 0) + 6;
+    for (var tries2 = 0; tries2 < 4000 && spots.length < bottomCount; tries2++) {
+      var bEdge = Math.random() < (phone ? 0.15 : 0.3) || climbFrom >= H - half ? "bottom" : (Math.random() < 0.5 ? "left" : "right");
+      var bx, by;
+      if (bEdge === "bottom") {
+        bx = rand(0, W); by = rand(H - depth, H + 12);
+        if (bx > navL && bx < navR) continue;   // corners only, like the top
+        if (by - half < cardsEnd) continue;
+      } else {
+        bx = bEdge === "left" ? rand(-12, depth) : rand(W - depth, W + 12);
+        by = rand(climbFrom, H);
+      }
+      if (fits(bx, by)) spots.push({ x: bx, y: by, turn: turn(), first: false });
     }
 
     // Further down the sides, desktop only: each side edge, about 70–110
