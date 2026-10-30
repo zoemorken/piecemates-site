@@ -157,6 +157,60 @@ a { color: var(--link); text-underline-offset: 3px; }
 /* Keyboard focus gets the same pill, plus the focus ring. */
 .nav-links a:focus-visible { background: var(--nav-link-hover); }
 
+/* Phone nav menu (design, Oct 30, option B). Hidden on desktop. */
+.menu-button {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+}
+.menu-button svg { display: block; }
+.menu-button .icon-x, .nav.open .menu-button .icon-list { display: none; }
+.nav.open .menu-button .icon-x { display: block; }
+.menu-button:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+/* The panel drops 8 below the pill, same width; fades in and drops 8 (200 ms). */
+.nav-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 9px);   /* 8 below the pill's outer edge (its border is 1) */
+  left: -1px;
+  right: -1px;
+  padding: 16px;
+  border: 1px solid var(--nav-stroke);
+  border-radius: 24px;
+  background: var(--nav-fill-solid);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px rgb(18 56 74 / 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity 200ms ease-out, transform 200ms ease-out, visibility 0s 200ms;
+}
+.nav-menu:focus { outline: none; }
+.nav.open .nav-menu { opacity: 1; visibility: visible; transform: none; transition: opacity 200ms ease-out, transform 200ms ease-out; }
+/* Rows: Web/NavLink, 48 tall; labels line up with the logo. */
+.nav-menu a:not(.button) {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 7px;   /* label lines up with the logo, 24 from the outer edge */
+  border-radius: 999px;
+  color: var(--text);
+  text-decoration: none;
+  font: 600 14px/20px "Plus Jakarta Sans", system-ui, sans-serif;
+}
+.nav-menu a:not(.button):hover, .nav-menu a:not(.button):focus-visible { background: var(--nav-link-hover); }
+.nav-menu a:not(.button):focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+.nav .nav-menu .button { display: flex; width: 100%; margin-top: 8px; padding: 16px 24px; font-size: 16px; line-height: 24px; }   /* full size, 56 tall */
+
 /* The app's primary button, in web/button colors. */
 .button {
   display: inline-flex;
@@ -236,8 +290,11 @@ a { color: var(--link); text-underline-offset: 3px; }
     right: 16px;
     transform: none;
     justify-content: space-between;
+    padding: 8px 5px 8px 23px;   /* logo 24 and the menu icon 16 from the pill's outer edge */
   }
-  .nav-links { display: none; }
+  .nav-links, .nav > .button { display: none; }
+  .menu-button { display: flex; }
+  .nav-menu { display: block; }
   .footer { padding: 16px var(--gutter) 24px; }
   .footer a.instagram { display: flex; margin: -4px auto -12px; }
 }
@@ -309,7 +366,7 @@ a { color: var(--link); text-underline-offset: 3px; }
 .sheet .row { display: flex; flex-direction: column; gap: 16px; padding: 16px 0; }
 
 @media (max-width: 767px) {
-  .table.text-page { padding: 96px 8px 24px; }
+  .table.text-page { padding: 96px 8px 56px; }   /* 56 like Home, so the bottom row of pieces has room (Oct 30) */
   .sheet { padding: 24px; }
   .sheet h1 { font-size: 24px; line-height: 32px; }   /* as in the Privacy phone frame */
 }
@@ -539,6 +596,7 @@ main { position: relative; z-index: 1; }
   .button::before, .button:hover::before, .button:focus-visible::before { transition: none; }   /* the color still changes, without the sweep */
   .footer a.instagram { transition: none; }
   .lines-done .icon-circle { animation: none; }
+  .nav-menu { transform: none; }   /* fade only */
   .nav { transition: none; }
   .reveal .dots.sized, .reveal .section-title, .reveal .sheet-card, .reveal .feature, .closing.reveal > * { clip-path: none; opacity: 1; transform: none; animation: none; }
 }

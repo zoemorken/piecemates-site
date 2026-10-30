@@ -88,6 +88,8 @@
     var avoid = keepOut(phone);
     var half = 31;                   // half of a piece's 62 box
     var spots = [];
+    var t = table.getBoundingClientRect();
+    function topOf(sel) { var el = document.querySelector(sel); return el ? el.getBoundingClientRect().top - t.top : H; }
 
     function fits(x, y) {
       return spots.every(function (s) { return Math.hypot(s.x - x, s.y - y) >= gap; }) &&
@@ -96,17 +98,44 @@
     function turn() { return rand(-35, 35); }
 
     // First screen: up to 36 (20 on phones), the ones that come from the pile.
+    // Phones keep them around the hero only, above the app screens or the
+    // text sheet: no pieces beside or behind the cards (design, Oct 30).
     var count = phone ? 20 : 36;
+    var firstLimit = phone ? Math.min(first, topOf(".screens-row, main.sheet")) : first;
     for (var tries = 0; tries < 4000 && spots.length < count; tries++) {
       var edge = Math.random() < (phone ? 0.15 : 0.3) ? "top" : (Math.random() < 0.5 ? "left" : "right");
       var x, y;
       if (edge === "top") { x = rand(0, W); y = rand(-12, depth); }
-      else { x = edge === "left" ? rand(-12, depth) : rand(W - depth, W + 12); y = rand(0, first - half); }
+      else { x = edge === "left" ? rand(-12, depth) : rand(W - depth, W + 12); y = rand(0, firstLimit - half); }
       if (fits(x, y)) spots.push({ x: x, y: y, turn: turn(), first: true });
     }
 
-    // Further down: each side edge, about 70–110 apart, to the bottom.
-    ["left", "right"].forEach(function (side) {
+    // Along the bottom edge, every page and size (design, Oct 30): cut by the
+    // edge like the top row, about half to 60% showing, 90–110 apart (60–70 on
+    // phones), and kept 24 clear below the closing block or the last sheet.
+    // Measured from the layout, not the screen: during the opening or the
+    // sheet's arrival these blocks are still shifted by their rise.
+    function layoutBottom(el) {
+      var y = el.offsetHeight;
+      for (var n = el; n && n !== table; n = n.offsetParent) y += n.offsetTop;
+      return y;
+    }
+    var clearLine = -Infinity;
+    document.querySelectorAll(".closing, main.sheet, .sections").forEach(function (el) {
+      clearLine = Math.max(clearLine, layoutBottom(el) + 24);
+    });
+    for (var bx = rand(0, 30); bx < W + 20; bx += phone ? rand(60, 70) : rand(90, 110)) {
+      var shape = Math.floor(Math.random() * SHAPES.length), tn = turn();
+      var a = Math.abs(tn) * Math.PI / 180, sw = SHAPES[shape].w * SCALE, sh = SHAPES[shape].h * SCALE;
+      var bh = sw * Math.sin(a) + sh * Math.cos(a);           // height of the turned piece
+      var showing = Math.min(rand(0.5, 0.6), (H - clearLine) / bh);
+      if (showing < 0.3) continue;                            // no room above the edge here
+      spots.push({ x: bx, y: H - showing * bh + bh / 2, turn: tn, shape: shape, first: false });
+    }
+
+    // Further down the sides, desktop only: each side edge, about 70–110
+    // apart, wherever the margin beside the cards is wide enough.
+    if (!phone) ["left", "right"].forEach(function (side) {
       for (var y = first + rand(0, 40); y < H - half; y += rand(70, 110)) {
         for (var k = 0; k < 6; k++) {
           var x = side === "left" ? rand(-12, depth) : rand(W - depth, W + 12);
@@ -129,7 +158,7 @@
     layer.className = "pieces";
     layer.setAttribute("aria-hidden", "true");
     pieces = spots.map(function (spot) {
-      var shape = pick(SHAPES);
+      var shape = spot.shape !== undefined ? SHAPES[spot.shape] : pick(SHAPES);
       var w = shape.w * SCALE, h = shape.h * SCALE;
       var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       svg.setAttribute("class", "piece");
@@ -217,6 +246,37 @@
     window.removeEventListener("scroll", onFirstScroll);
     if (!root.classList.contains("intro")) showScreens(true);   // else when the opening ends
     firstScrollHooks.forEach(function (fn) { fn(); });
+  }
+
+  // ---------- Phone menu ----------
+
+  // Under 768 the nav holds a menu button; the links and Join the beta drop
+  // down in a panel (design, Oct 30, option B). Closes on the button, Escape,
+  // a link or a tap outside. Focus moves into the panel and back to the button.
+  var menuButton = nav.querySelector(".menu-button");
+  var menu = document.getElementById("nav-menu");
+  // Opened from the keyboard, focus lands on the first link (with its ring);
+  // opened by a tap or click, it lands on the panel itself, so Tab still
+  // starts at the first link but no ring shows.
+  function setMenu(open, returnFocus, fromKeyboard) {
+    nav.classList.toggle("open", open);
+    menuButton.setAttribute("aria-expanded", open ? "true" : "false");
+    if (open) (fromKeyboard ? menu.querySelector("a") : menu).focus();
+    else if (returnFocus) menuButton.focus();
+  }
+  if (menuButton && menu) {
+    menu.setAttribute("tabindex", "-1");
+    menuButton.addEventListener("click", function (e) {
+      setMenu(!nav.classList.contains("open"), true, e.detail === 0);   // detail 0: Enter or Space
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && nav.classList.contains("open")) setMenu(false, true);
+    });
+    menu.addEventListener("click", function (e) { if (e.target.closest("a")) setMenu(false, false); });
+    document.addEventListener("pointerdown", function (e) {
+      if (nav.classList.contains("open") && !nav.contains(e.target)) setMenu(false, false);
+    });
+    matchMedia("(min-width: 768px)").addEventListener("change", function (m) { if (m.matches) setMenu(false, false); });
   }
 
   // ---------- Nav ----------
