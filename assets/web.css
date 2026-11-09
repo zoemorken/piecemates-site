@@ -575,7 +575,7 @@ main { position: relative; z-index: 1; }
 .piece.nudge { transition: transform 250ms ease-out; }
 
 /* The closing call to action steps in after the features: headline, then
-   Join the beta, then Coming soon to iPhone (Zoë, Oct 29). */
+   the App Store button, then the meta line (Zoë, Oct 29). */
 /* Transitions rather than an animation, so a hover effect on the button can't
    cancel the step-in. */
 .closing.reveal > * { opacity: 0; transform: translateY(8px); }

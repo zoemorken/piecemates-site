@@ -262,7 +262,7 @@
 
   // ---------- Phone menu ----------
 
-  // Under 768 the nav holds a menu button; the links and Join the beta drop
+  // Under 768 the nav holds a menu button; the links and the App Store button drop
   // down in a panel (design, Oct 30, option B). Closes on the button, Escape,
   // a link or a tap outside. Focus moves into the panel and back to the button.
   var menuButton = nav.querySelector(".menu-button");
